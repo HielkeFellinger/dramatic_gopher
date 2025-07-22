@@ -1,0 +1,21 @@
+package views
+
+import (
+	"hielkefellinger.nl/dramatic_gopher/app/views/components"
+)
+
+templ Homepage() {
+    <!DOCTYPE html>
+    <html lang="en">
+        @components.Header()
+        <body class="bg-gray-800">
+            <main class="min-h-screen w-full">
+
+            </main>
+        </body>
+        @components.Footer("Welcome")
+    </html>
+    <script>
+        // ...
+    </script>
+}
