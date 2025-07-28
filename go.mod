@@ -3,7 +3,7 @@ module hielkefellinger.nl/dramatic_gopher
 go 1.23.4
 
 require (
-	github.com/a-h/templ v0.3.920
+	github.com/a-h/templ v0.3.924
 	github.com/gin-gonic/gin v1.10.1
 	github.com/joho/godotenv v1.5.1
 )
