@@ -8,10 +8,11 @@ import (
 var CurrentConfig *Config
 
 type Config struct {
-	CryptCost string
-	JwtSecret string
-	Host      string
-	Port      string
+	CryptCost        string
+	JwtSecret        string
+	Host             string
+	Port             string
+	CampaignSavesDir string
 }
 
 func InitConfig() *Config {
@@ -25,12 +26,18 @@ func InitConfig() *Config {
 	// Required
 	configInit.Port = os.Getenv("PORT")
 	configInit.JwtSecret = os.Getenv("JWT_SECRET")
+	configInit.CampaignSavesDir = os.Getenv("CAMPAIGN_SAVES_DIR")
 
 	if len(configInit.JwtSecret) < 8 {
 		log.Panic("CONFIG: Invalid (to small <8 chars) or empty JWT secret (env.JWT_SECRET)")
 	}
 	if len(configInit.Port) == 0 {
 		log.Panic("CONFIG: Invalid or missing Port (env.PORT)")
+	}
+
+	_, readError := os.ReadDir(configInit.CampaignSavesDir)
+	if readError != nil {
+		log.Panic("CONFIG: Error reading save dir (env.CAMPAIGN_SAVES_DIR): ", readError)
 	}
 
 	// Optional
