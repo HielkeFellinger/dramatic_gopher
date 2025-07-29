@@ -1,12 +1,14 @@
 package routes
 
 import (
+	"github.com/HielkeFellinger/dramatic_gopher/app/middleware"
+	"github.com/HielkeFellinger/dramatic_gopher/app/pages"
 	"github.com/gin-gonic/gin"
-	"hielkefellinger.nl/dramatic_gopher/app/pages"
 )
 
 func HandlePageRoutes(router *gin.Engine) {
 
 	// Pages
-	router.GET("/", pages.Homepage())
+	router.GET("/", middleware.EnsureUserValuesIsSet, pages.Homepage())
+	router.GET("/game/new", middleware.EnsureUserValuesIsSet, pages.Homepage())
 }

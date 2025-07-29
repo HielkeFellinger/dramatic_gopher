@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/HielkeFellinger/dramatic_gopher/app/config"
+	"github.com/HielkeFellinger/dramatic_gopher/app/initializers"
+	"github.com/HielkeFellinger/dramatic_gopher/app/routes"
 	"github.com/gin-gonic/gin"
-	"hielkefellinger.nl/dramatic_gopher/app/config"
-	"hielkefellinger.nl/dramatic_gopher/app/initializers"
-	"hielkefellinger.nl/dramatic_gopher/app/routes"
 	"log"
 )
 

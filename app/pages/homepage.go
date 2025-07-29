@@ -1,8 +1,8 @@
 package pages
 
 import (
+	"github.com/HielkeFellinger/dramatic_gopher/app/views"
 	"github.com/gin-gonic/gin"
-	"hielkefellinger.nl/dramatic_gopher/app/views"
 	"net/http"
 )
 
