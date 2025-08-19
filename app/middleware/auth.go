@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"log"
+
 	"github.com/HielkeFellinger/dramatic_gopher/app/models"
 	"github.com/HielkeFellinger/dramatic_gopher/app/utils"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 func EnsureUserValuesIsSet(c *gin.Context) {

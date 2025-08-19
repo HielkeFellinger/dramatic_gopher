@@ -1,9 +1,10 @@
 package session
 
 import (
-	"github.com/gorilla/websocket"
 	"log"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 const (
@@ -16,11 +17,13 @@ const (
 	pingPeriod = (pongWait * 9) / 10
 )
 
-type player struct {
-	conn *websocket.Conn
+type Player struct {
+	Id          string
+	conn        *websocket.Conn
+	GameSession *GameSession
 }
 
-func (p *player) readPump() {
+func (p *Player) readPump() {
 	defer func() {
 		_ = p.conn.Close()
 	}()
@@ -44,7 +47,7 @@ func (p *player) readPump() {
 }
 
 // WritePump sends messages from the `send` channel to the WebSocket connection
-func (p *player) writePump() {
+func (p *Player) writePump() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()

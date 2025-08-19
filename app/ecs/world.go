@@ -6,6 +6,8 @@ type World interface {
 }
 
 type BaseWorld struct {
+	Entities []*Entity
+	Systems  []*System
 }
 
 func NewBaseWorld() *BaseWorld {
