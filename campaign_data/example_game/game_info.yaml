@@ -1,0 +1,4 @@
+title: Example Game
+description: Some Test Game
+game_files:
+  - 'saves/game.yaml'

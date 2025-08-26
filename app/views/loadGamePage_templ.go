@@ -12,7 +12,7 @@ import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/views/components"
 )
 
-func Homepage() templ.Component {
+func LoadGamePage() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -41,7 +41,7 @@ func Homepage() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><section class=\"mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg\"><h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Start a new game!</h4><button onclick=\"window.location = '/game/new';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500\">CREATE NEW GAME </button> <button onclick=\"window.location = '/game/load';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500\">LOAD A GAME </button></section></div></main></body>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><section class=\"mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg\"><h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Choose a Game!</h4><button onclick=\"window.location = '/game/new';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500\">CREATE NEW GAME </button></section></div></main></body>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -11,4 +11,5 @@ func HandlePageRoutes(router *gin.Engine) {
 	// Pages
 	router.GET("/", middleware.EnsureUserValuesIsSet, pages.Homepage())
 	router.GET("/game/new", middleware.EnsureUserValuesIsSet, pages.Homepage())
+	router.GET("/game/load", middleware.EnsureUserValuesIsSet, pages.LoadGamePage())
 }

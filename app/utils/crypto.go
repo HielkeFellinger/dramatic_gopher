@@ -1,9 +1,10 @@
 package utils
 
 import (
+	"strconv"
+
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 	"golang.org/x/crypto/bcrypt"
-	"strconv"
 )
 
 var minCryptoCost = 16

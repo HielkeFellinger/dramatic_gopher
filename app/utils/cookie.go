@@ -3,12 +3,13 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"net/http"
-	"time"
 )
 
 const SessionCookieName = "Session"

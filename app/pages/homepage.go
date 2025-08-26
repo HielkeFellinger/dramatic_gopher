@@ -1,9 +1,10 @@
 package pages
 
 import (
+	"net/http"
+
 	"github.com/HielkeFellinger/dramatic_gopher/app/views"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func Homepage() gin.HandlerFunc {
