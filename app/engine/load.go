@@ -1,17 +1,16 @@
 package engine
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
-	"gopkg.in/yaml.v3"
 )
 
 func FindAvailableGames() []*BaseGame {
 	possibleGames := make([]*BaseGame, 0)
-
 	campaignSaveDir := config.CurrentConfig.CampaignSavesDir
 
 	entries, readErr := os.ReadDir(campaignSaveDir)
@@ -30,18 +29,18 @@ func FindAvailableGames() []*BaseGame {
 					}
 
 					// A file has been found; attempt to load it!
-					if campaignEntry.Name() == "game_info.yaml" {
+					if campaignEntry.Name() == "game_info.json" {
 						// Attempt to load basics:
 						gameInfoData, gameReadErr := os.ReadFile(filepath.Join(currentCampaignPath, campaignEntry.Name()))
 						if gameReadErr != nil {
-							log.Println("Error Reading campaign 'game_info.yaml' File: ", gameReadErr.Error())
+							log.Println("Error Reading campaign 'game_info.json' File: ", gameReadErr.Error())
 							continue
 						}
 
 						var potentialGame BaseGame
 						log.Println(string(gameInfoData))
-						if gameUnmarshallErr := yaml.Unmarshal(gameInfoData, &potentialGame); gameUnmarshallErr != nil {
-							log.Println("Error parsing campaign 'game_info.yaml' File: ", gameUnmarshallErr.Error())
+						if gameUnmarshallErr := json.Unmarshal(gameInfoData, &potentialGame); gameUnmarshallErr != nil {
+							log.Println("Error parsing campaign 'game_info.json' File: ", gameUnmarshallErr.Error())
 							continue
 						}
 

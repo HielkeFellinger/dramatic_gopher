@@ -1,6 +1,16 @@
 package components
 
-templ buildGameCard() {
-    <div>
+import "github.com/HielkeFellinger/dramatic_gopher/app/engine"
+
+
+templ BuildGameCard(game engine.Game) {
+    <div class="border border-zinc-200 border-2 shadow-md min-w-lg max-w-lg grid grid-flow-col grid-rows-1 gap-2 bg-gray-800 rounded-lg cursor-pointer text-white">
+        <div class="col-span-1 m-2">
+        </div>
+        <div class="col-span-4 m-2">
+            <h4>{ game.GetTitle() }</h4>
+            <hr>
+            { game.GetDescription() }
+        </div>
     </div>
 }

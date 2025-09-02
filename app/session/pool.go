@@ -29,3 +29,13 @@ func (gp *gamePool) Run() {
 		}
 	}
 }
+
+func IsGameRunning(id string) bool {
+	for session, _ := range runningSessionPool.Sessions {
+		game := *session.Game
+		if game.GetId() == id {
+			return true
+		}
+	}
+	return false
+}

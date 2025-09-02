@@ -15,23 +15,52 @@ type Game interface {
 	GetTitle() string
 	GetDescription() string
 	GetImageUrl() string
+	IsRunning() bool
 	Init() error
-	Validate() error
+	Validate() (string, error)
 }
 
 type BaseGame struct {
 	Id          string
-	Title       string   `yaml:"title"`
-	Description string   `yaml:"description"`
-	ImageUrl    string   `yaml:"image_url"`
-	GameFiles   []string `yaml:"game_files"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	ImageUrl    string `json:"imageUrl"`
+	SaveFile    string `json:"saveFile"`
+	Running     bool
 	World       *ecs.World
 }
 
 func NewBaseGame(id string) *BaseGame {
 	return &BaseGame{
-		Id:        id,
-		GameFiles: make([]string, 0),
+		Id: id,
+	}
+}
+
+func (bg *BaseGame) Init() error {
+	validSaveFile, validationErr := bg.Validate()
+	if validationErr != nil {
+		return fmt.Errorf("failed to validate campaign: '%q'", bg.Id)
+	}
+
+	// Attempt to initialize...
+	log.Printf("Validating game file: '%s'", validSaveFile)
+
+	return nil
+}
+
+func (bg *BaseGame) Validate() (string, error) {
+	// Test if there are files to load in the first place
+	if len(bg.SaveFile) == 0 {
+		return "", fmt.Errorf("no game files found for campaign dir/id: '%q'", bg.Id)
+	}
+
+	campaignPath := filepath.Join(config.CurrentConfig.CampaignSavesDir, bg.Id)
+
+	// Test if all game files are readable
+	if validGameFilePath, gameFilePathErr := getValidatedGameFile(campaignPath, strings.TrimSpace(bg.SaveFile)); gameFilePathErr != nil {
+		return "", gameFilePathErr
+	} else {
+		return validGameFilePath, nil
 	}
 }
 
@@ -51,40 +80,6 @@ func (bg *BaseGame) GetImageUrl() string {
 	return bg.ImageUrl
 }
 
-func (bg *BaseGame) Init() error {
-	valid, validGameFiles, validationErrs := bg.Validate()
-	if !valid || len(validationErrs) > 0 {
-		return fmt.Errorf("failed to validate campaign: '%q'", bg.Id)
-	}
-
-	// Attempt to initialize...
-	for _, validGameFile := range validGameFiles {
-		// TODO LOAD!
-		log.Printf("Validating game file: '%s'", validGameFile)
-	}
-
-	return nil
-}
-
-func (bg *BaseGame) Validate() (bool, []string, []error) {
-	validGameFiles := make([]string, 0)
-	valErrors := make([]error, 0)
-
-	// Test if there are files to load in the first place
-	if len(bg.GameFiles) == 0 {
-		valErrors = append(valErrors, fmt.Errorf("no game files found for campaign dir/id: '%q'", bg.Id))
-	}
-
-	campaignPath := filepath.Join(config.CurrentConfig.CampaignSavesDir, bg.Id)
-
-	// Test if all game files are readable
-	for _, gameFilePath := range bg.GameFiles {
-		if validGameFilePath, gameFilePathErr := getValidatedGameFile(campaignPath, strings.TrimSpace(gameFilePath)); gameFilePathErr != nil {
-			valErrors = append(valErrors, gameFilePathErr)
-		} else {
-			validGameFiles = append(validGameFiles, validGameFilePath)
-		}
-	}
-
-	return len(valErrors) == 0, validGameFiles, valErrors
+func (bg *BaseGame) IsRunning() bool {
+	return bg.Running
 }

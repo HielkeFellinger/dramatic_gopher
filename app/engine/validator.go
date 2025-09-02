@@ -27,9 +27,9 @@ func getValidatedGameFile(baseDir, userPath string) (string, error) {
 		return "", fmt.Errorf("path %q escapes base directory %q", userPath, baseDir)
 	}
 
-	// Require .yaml or .yml (case-insensitive)
-	if ext := filepath.Ext(checkedAbsPath); !(strings.EqualFold(ext, ".yaml") || strings.EqualFold(ext, ".yml")) {
-		return "", fmt.Errorf("invalid extension for file %q: must be .yaml or .yml", checkedAbsPath)
+	// Requires .json (case-insensitive)
+	if ext := filepath.Ext(checkedAbsPath); !(strings.EqualFold(ext, ".json")) {
+		return "", fmt.Errorf("invalid extension for file %q: must be .json", checkedAbsPath)
 	}
 
 	// Ensure it exists, is accessible and is a regular file
