@@ -2,10 +2,9 @@ package engine
 
 import "encoding/json"
 
-// https://stackoverflow.com/questions/36525602/can-i-unmarshal-json-into-implementers-of-an-interface
-
 type RawSaveFile struct {
 	Version    string      `json:"version"`
+	Crypto     GameCrypto  `json:"crypto"`
 	Items      []RawEntity `json:"items"`
 	Characters []RawEntity `json:"characters"`
 	Maps       []RawEntity `json:"maps"`

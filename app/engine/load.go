@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -19,40 +20,46 @@ func FindAvailableGames() []*BaseGame {
 	}
 	for _, entry := range entries {
 		if entry.IsDir() {
-
-			// Test if there is a game_info_file
-			currentCampaignPath := filepath.Join(campaignSaveDir, entry.Name())
-			if campaignFiles, campaignReadError := os.ReadDir(currentCampaignPath); campaignReadError == nil {
-				for _, campaignEntry := range campaignFiles {
-					if campaignEntry.IsDir() {
-						continue
-					}
-
-					// A file has been found; attempt to load it!
-					if campaignEntry.Name() == "game_info.json" {
-						// Attempt to load basics:
-						gameInfoData, gameReadErr := os.ReadFile(filepath.Join(currentCampaignPath, campaignEntry.Name()))
-						if gameReadErr != nil {
-							log.Println("Error Reading campaign 'game_info.json' File: ", gameReadErr.Error())
-							continue
-						}
-
-						var potentialGame BaseGame
-						log.Println(string(gameInfoData))
-						if gameUnmarshallErr := json.Unmarshal(gameInfoData, &potentialGame); gameUnmarshallErr != nil {
-							log.Println("Error parsing campaign 'game_info.json' File: ", gameUnmarshallErr.Error())
-							continue
-						}
-
-						// Validate if all files are reachable!
-						possibleGames = append(possibleGames, &potentialGame)
-					}
-				}
+			if possibleGame, loadErr := LoadGameById(entry.Name()); loadErr == nil {
+				possibleGames = append(possibleGames, possibleGame)
 			} else {
-				log.Println("Could not read campaign saves dir: ", campaignReadError.Error())
+				log.Println("Could not read potential campaign dir: ", loadErr)
 			}
 		}
 	}
 
 	return possibleGames
+}
+
+func LoadGameById(id string) (*BaseGame, error) {
+	campaignSaveDir := config.CurrentConfig.CampaignSavesDir
+	currentCampaignPath := filepath.Join(campaignSaveDir, id)
+	if campaignFiles, campaignReadError := os.ReadDir(currentCampaignPath); campaignReadError == nil {
+		for _, campaignEntry := range campaignFiles {
+			if campaignEntry.IsDir() {
+				continue
+			}
+
+			// A file has been found; attempt to load it!
+			if campaignEntry.Name() == "game_info.json" {
+				// Attempt to load basics:
+				gameInfoData, gameReadErr := os.ReadFile(filepath.Join(currentCampaignPath, campaignEntry.Name()))
+				if gameReadErr != nil {
+					return nil, fmt.Errorf("error Reading campaign 'game_info.json' File: '%s'", gameReadErr.Error())
+				}
+
+				var potentialGame BaseGame
+				log.Println(string(gameInfoData))
+				if gameUnmarshallErr := json.Unmarshal(gameInfoData, &potentialGame); gameUnmarshallErr != nil {
+					return nil, fmt.Errorf("error parsing campaign 'game_info.json' File: '%s'", gameUnmarshallErr.Error())
+				}
+
+				// Validate if all files are reachable!
+				return &potentialGame, nil
+			}
+		}
+	} else {
+		return nil, fmt.Errorf("could not read campaign saves dir: %s", campaignReadError.Error())
+	}
+	return nil, fmt.Errorf("could not load campaign by id: '%s', no match found", id)
 }

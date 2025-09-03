@@ -20,14 +20,22 @@ type Game interface {
 	Validate() (string, error)
 }
 
+type GameCrypto struct {
+	MainPassword   string `json:"mainPassword"`
+	ClientPassword string `json:"clientPassword"`
+	Description    string `json:"description"`
+}
+
 type BaseGame struct {
 	Id          string
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	ImageUrl    string `json:"imageUrl"`
-	SaveFile    string `json:"saveFile"`
+	Title       string     `json:"title"`
+	Version     string     `json:"-"` // Sourced form SafeFile
+	Crypto      GameCrypto `json:"-"` // Sourced form SafeFile
+	Description string     `json:"description"`
+	ImageUrl    string     `json:"imageUrl"`
+	SaveFile    string     `json:"saveFile"`
 	Running     bool
-	World       *ecs.World
+	World       *ecs.World // Sourced form SafeFile
 }
 
 func NewBaseGame(id string) *BaseGame {
@@ -37,6 +45,7 @@ func NewBaseGame(id string) *BaseGame {
 }
 
 func (bg *BaseGame) Init() error {
+
 	validSaveFile, validationErr := bg.Validate()
 	if validationErr != nil {
 		return fmt.Errorf("failed to validate campaign: '%q'", bg.Id)
