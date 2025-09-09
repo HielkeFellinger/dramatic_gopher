@@ -42,7 +42,7 @@ func LoadGamePage(games []engine.Game) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><section class=\"mt-6 px-4 py-4 w-2xl bg-gray-700 rounded-lg\"><h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Choose a Game!</h4><div class=\"flex flex-wrap justify-center items-center w-full\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><section class=\"mt-6 px-4 py-4 bg-gray-700 rounded-lg\"><h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Choose a Game!</h4><div class=\"flex mt-2 flex-wrap justify-center items-center \">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

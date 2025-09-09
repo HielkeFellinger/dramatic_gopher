@@ -21,9 +21,9 @@ type Game interface {
 }
 
 type GameCrypto struct {
-	MainPassword   string `json:"mainPassword"`
-	ClientPassword string `json:"clientPassword"`
-	Description    string `json:"description"`
+	GameMasterPassword string `json:"gameMasterPassword"`
+	ClientPassword     string `json:"clientPassword"`
+	Description        string `json:"description"`
 }
 
 type BaseGame struct {

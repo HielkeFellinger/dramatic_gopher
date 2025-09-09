@@ -31,7 +31,7 @@ func BuildGameCard(game engine.Game) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"border border-zinc-200 border-2 shadow-md min-w-lg max-w-lg grid grid-flow-col grid-rows-1 gap-2 bg-gray-800 rounded-lg cursor-pointer text-white\"><div class=\"col-span-1 m-2\"></div><div class=\"col-span-4 m-2\"><h4>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"m-1 border border-zinc-200 border-2 min-w-96 max-w-96 shadow-md grid grid-flow-col grid-rows-1 gap-2 bg-gray-800 rounded-lg cursor-pointer text-white\"><div class=\"col-span-2 m-2\"></div><div class=\"col-span-5 m-2\"><h4>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

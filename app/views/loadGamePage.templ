@@ -12,9 +12,9 @@ templ LoadGamePage(games []engine.Game) {
         <body class="bg-gray-800">
             <main class="min-h-screen w-full">
                 <div class="mt-6 w-full flex justify-center items-center flex-col">
-                    <section class="mt-6 px-4 py-4 w-2xl bg-gray-700 rounded-lg">
+                    <section class="mt-6 px-4 py-4 bg-gray-700 rounded-lg">
                         <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center">Choose a Game!</h4>
-                        <div class="flex flex-wrap justify-center items-center w-full">
+                        <div class="flex mt-2 flex-wrap justify-center items-center ">
                             for _, game := range games {
                                 @components.BuildGameCard(game)
                             }
