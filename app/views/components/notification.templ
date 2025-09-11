@@ -1,0 +1,45 @@
+package components
+
+import (
+    "github.com/HielkeFellinger/dramatic_gopher/app/models"
+)
+
+templ Notifications(notifications []models.Notification) {
+    <section class="mt-6 py-4 w-96">
+    for _, notification := range notifications {
+        @Notification(notification)
+    }
+    </section>
+}
+
+templ Notification(notification models.Notification) {
+    if notification.Type == models.Error {
+        <div id={ notification.Id } onclick="this.remove()" class="border border-red-700 border-2 shadow-md rounded-lg p-1 mb-2 bg-red-50 w-96 cursor-pointer">
+            <div class="w-full flex items-center justify-between">
+                <div class="size-10 flex items-center justify-center">❌</div>
+                <div class="size-10 flex grow justify-center items-center flex-grow">{ notification.Content }</div>
+            </div>
+        </div>
+    } else if notification.Type == models.Warning {
+        <div id={ notification.Id } onclick="this.remove()" class="border border-yellow-700 border-2 shadow-md rounded-lg p-1 mb-2 bg-yellow-50 w-96 cursor-pointer">
+            <div class="w-full flex items-center justify-between">
+                <div class="size-10 flex items-center justify-center">⚠️</div>
+                <div class="size-10 w-full flex justify-center items-center flex-grow">{ notification.Content }</div>
+            </div>
+        </div>
+    } else if notification.Type == models.Success {
+        <div id={ notification.Id } onclick="this.remove()" class="border border-green-700 border-2 shadow-md rounded-lg p-1 mb-2 bg-green-50 w-96 cursor-pointer">
+            <div class="w-full flex items-center justify-between">
+                <div class="size-10 flex items-center justify-center">✅</div>
+                <div class="size-10 w-full flex justify-center items-center flex-grow">{ notification.Content }</div>
+            </div>
+        </div>
+    } else {
+        <div id={ notification.Id } onclick="this.remove()" class="border border-blue-700 border-2 shadow-md rounded-lg p-1 mb-2 bg-blue-50 w-96 cursor-pointer">
+            <div class="w-full flex items-center justify-between">
+                <div class="size-10 flex items-center justify-center">❔</div>
+                <div class="size-10 w-full flex justify-center items-center flex-grow">{ notification.Content }</div>
+            </div>
+        </div>
+    }
+}

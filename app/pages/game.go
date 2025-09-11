@@ -26,3 +26,23 @@ func LoadGamePage() gin.HandlerFunc {
 		}
 	}
 }
+
+func LoadJoinGamePage() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Load Game
+		id := c.Param("id")
+		game, loadErr := engine.LoadGameById(id)
+
+		if loadErr != nil {
+			_ = c.Error(loadErr)
+			c.Abort()
+		} else {
+			game.Running = session.IsGameRunning(game.Id)
+		}
+
+		err := render(c, http.StatusOK, views.JoinGamePage(game))
+		if err != nil {
+			return
+		}
+	}
+}

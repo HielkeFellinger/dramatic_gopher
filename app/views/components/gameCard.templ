@@ -11,6 +11,10 @@ templ BuildGameCard(game engine.Game) {
             <h4>{ game.GetTitle() }</h4>
             <hr>
             { game.GetDescription() }
+            <br>
+            <a href={ "/game/join/" + game.GetId() }>
+                Play
+            </a>
         </div>
     </div>
 }

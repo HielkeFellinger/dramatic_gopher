@@ -1,0 +1,31 @@
+package views
+
+import (
+	"github.com/HielkeFellinger/dramatic_gopher/app/views/components"
+    "github.com/HielkeFellinger/dramatic_gopher/app/engine"
+)
+
+templ JoinGamePage(game engine.Game) {
+    <!DOCTYPE html>
+    <html lang="en">
+        @components.Header()
+        <body class="bg-gray-800">
+            <main class="min-h-screen w-full">
+                <div class="mt-6 w-full flex justify-center items-center flex-col">
+                    <section class="mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg">
+                        <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center">Joining Game: '{game.GetTitle()}'</h4>
+                        <form method="post" action={ "/game/join/" + game.GetId() } >
+                            <label for="password" class="text-gray-700 ml-1">Join Password: </label>
+                            <input type="password" id="password" name="password" class="w-full border rounded-lg p-2 mt-2 mb-2" placeholder="Password" />
+                            <button class="mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500"> JOIN </button>
+                        </form>
+                    </section>
+                </div>
+            </main>
+        </body>
+        @components.Footer("Welcome")
+    </html>
+    <script>
+        // ...
+    </script>
+}

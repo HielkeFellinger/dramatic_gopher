@@ -55,6 +55,7 @@ func LoadGameById(id string) (*BaseGame, error) {
 				}
 
 				// Validate if all files are reachable!
+				potentialGame.Id = id
 				return &potentialGame, nil
 			}
 		}
