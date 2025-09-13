@@ -37,7 +37,6 @@ func (p *Player) readPump() {
 
 	for {
 		_, message, err := p.conn.ReadMessage()
-
 		if err != nil {
 			log.Println("read error:", err)
 			break

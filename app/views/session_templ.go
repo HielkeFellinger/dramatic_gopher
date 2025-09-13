@@ -14,7 +14,7 @@ import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/views/components"
 )
 
-func LoadGamePage(games []engine.Game, notifications []models.Notification) templ.Component {
+func Session(user models.User, game engine.Game) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -43,35 +43,7 @@ func LoadGamePage(games []engine.Game, notifications []models.Notification) temp
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><section class=\"mt-6 px-4 py-4 bg-gray-700 rounded-lg\"><h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Choose a Game!</h4>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if len(notifications) > 0 {
-			templ_7745c5c3_Err = components.Notifications(notifications).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"flex mt-2 flex-wrap justify-center items-center \">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		for _, game := range games {
-			templ_7745c5c3_Err = components.BuildGameCard(game).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div></section></div></main></body>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = components.Footer("Welcome").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</html><script>\n        // ...\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"container mx-auto flex flex-col justify-center items-center min-h-screen\"><div class=\"min-w-96\"></div><div class=\"\"></div><div class=\"min-w-96\"></div></div></main></body></html><script>\n        // Build the Socket connection\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

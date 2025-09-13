@@ -8,6 +8,8 @@ import (
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 	"github.com/HielkeFellinger/dramatic_gopher/app/ecs"
+	"github.com/HielkeFellinger/dramatic_gopher/app/utils"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Game interface {
@@ -18,19 +20,21 @@ type Game interface {
 	IsRunning() bool
 	Init() error
 	Validate() (string, error)
+	AuthenticateAsLead(password string) bool
+	AuthenticateAsClient(password string) bool
 }
 
 type GameCrypto struct {
-	GameMasterPassword string `json:"gameMasterPassword"`
-	ClientPassword     string `json:"clientPassword"`
-	Description        string `json:"description"`
+	LeadPassword   string `json:"leadPassword"`
+	ClientPassword string `json:"clientPassword"`
+	Description    string `json:"description"`
 }
 
 type BaseGame struct {
 	Id          string
 	Title       string     `json:"title"`
 	Version     string     `json:"-"` // Sourced form SafeFile
-	Crypto      GameCrypto `json:"-"` // Sourced form SafeFile
+	Crypto      GameCrypto `json:"crypto"`
 	Description string     `json:"description"`
 	ImageUrl    string     `json:"imageUrl"`
 	SaveFile    string     `json:"saveFile"`
@@ -38,14 +42,7 @@ type BaseGame struct {
 	World       *ecs.World // Sourced form SafeFile
 }
 
-func NewBaseGame(id string) *BaseGame {
-	return &BaseGame{
-		Id: id,
-	}
-}
-
 func (bg *BaseGame) Init() error {
-
 	validSaveFile, validationErr := bg.Validate()
 	if validationErr != nil {
 		return fmt.Errorf("failed to validate campaign: '%q'", bg.Id)
@@ -91,4 +88,28 @@ func (bg *BaseGame) GetImageUrl() string {
 
 func (bg *BaseGame) IsRunning() bool {
 	return bg.Running
+}
+
+func (bg *BaseGame) AuthenticateAsClient(password string) bool {
+	hashWord, err := utils.HashPassword(password)
+	if errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.ClientPassword), hashWord); err == nil && errBcrypt == nil {
+		return true
+	} else {
+		log.Println(password)
+		log.Println(err)
+		log.Println(errBcrypt)
+	}
+	return false
+}
+
+func (bg *BaseGame) AuthenticateAsLead(password string) bool {
+	hashWord, err := utils.HashPassword(password)
+	if errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.LeadPassword), hashWord); err == nil && errBcrypt == nil {
+		return true
+	} else {
+		log.Println(password)
+		log.Println(err)
+		log.Println(errBcrypt)
+	}
+	return false
 }

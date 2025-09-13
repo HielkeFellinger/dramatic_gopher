@@ -3,9 +3,10 @@ package views
 import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/views/components"
 	"github.com/HielkeFellinger/dramatic_gopher/app/engine"
+	"github.com/HielkeFellinger/dramatic_gopher/app/models"
 )
 
-templ LoadGamePage(games []engine.Game) {
+templ LoadGamePage(games []engine.Game, notifications []models.Notification) {
     <!DOCTYPE html>
     <html lang="en">
         @components.Header()
@@ -14,6 +15,9 @@ templ LoadGamePage(games []engine.Game) {
                 <div class="mt-6 w-full flex justify-center items-center flex-col">
                     <section class="mt-6 px-4 py-4 bg-gray-700 rounded-lg">
                         <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center">Choose a Game!</h4>
+                        if len(notifications) > 0 {
+                            @components.Notifications(notifications)
+                        }
                         <div class="flex mt-2 flex-wrap justify-center items-center ">
                             for _, game := range games {
                                 @components.BuildGameCard(game)

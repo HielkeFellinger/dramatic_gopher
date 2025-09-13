@@ -7,8 +7,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-const ()
-
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  2048,
 	WriteBufferSize: 2048,

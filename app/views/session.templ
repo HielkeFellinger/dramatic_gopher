@@ -1,0 +1,29 @@
+package views
+
+import (
+	"github.com/HielkeFellinger/dramatic_gopher/app/views/components"
+	"github.com/HielkeFellinger/dramatic_gopher/app/engine"
+	"github.com/HielkeFellinger/dramatic_gopher/app/models"
+)
+
+templ Session(user models.User, game engine.Game) {
+    <!DOCTYPE html>
+    <html lang="en">
+        @components.Header()
+        <body class="bg-gray-800">
+            <main class="min-h-screen w-full">
+                <div class="container mx-auto flex flex-col justify-center items-center min-h-screen">
+                    <div class="min-w-96">
+                    </div>
+                    <div class="">
+                    </div>
+                    <div class="min-w-96">
+                    </div>
+                </div>
+            </main>
+        </body>
+    </html>
+    <script>
+        // Build the Socket connection
+    </script>
+}

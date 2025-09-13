@@ -2,9 +2,8 @@ package components
 
 import "github.com/HielkeFellinger/dramatic_gopher/app/engine"
 
-
 templ BuildGameCard(game engine.Game) {
-    <div class="m-1 border border-zinc-200 border-2 min-w-96 max-w-96 shadow-md grid grid-flow-col grid-rows-1 gap-2 bg-gray-800 rounded-lg cursor-pointer text-white">
+    <div class="m-1 border border-zinc-200 border-2 min-w-96 max-w-96 shadow-md grid grid-flow-col grid-rows-1 gap-2 bg-gray-800 rounded-lg text-white">
         <div class="col-span-2 m-2">
         </div>
         <div class="col-span-5 m-2">
@@ -13,7 +12,11 @@ templ BuildGameCard(game engine.Game) {
             { game.GetDescription() }
             <br>
             <a href={ "/game/join/" + game.GetId() }>
-                Play
+                if game.IsRunning() {
+                    Join
+                } else {
+                    Play
+                }
             </a>
         </div>
     </div>
