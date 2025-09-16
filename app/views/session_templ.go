@@ -43,7 +43,7 @@ func Session(user models.User, game engine.Game) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"container mx-auto flex flex-col justify-center items-center min-h-screen\"><div class=\"min-w-96\"></div><div class=\"\"></div><div class=\"min-w-96\"></div></div></main></body></html><script>\n        // Build the Socket connection\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen min-h-screen min-w-screen\"><div class=\"container flex flex-row justify-center items-center min-h-screen min-w-screen\"><div class=\"min-w-128 min-h-screen border-r border-gray-700 border-1 items-center justify-between\"></div><div class=\"flex min-h-screen justify-center items-center flex-grow\"></div><div class=\"min-w-128 min-h-screen border-l border-gray-700 border-1 items-center justify-between\"></div></div></main></body></html><script>\n        // Build the Socket connection\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

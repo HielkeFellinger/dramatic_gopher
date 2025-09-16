@@ -69,7 +69,7 @@ func JoinGamePage(game engine.Game, user models.User, notifications []models.Not
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><label for=\"displayName\" class=\"text-gray-200 ml-1\">Your Display Name: </label> <input type=\"text\" id=\"displayName\" name=\"displayName\" class=\"w-full border rounded-lg p-2 mt-2 mb-2\" placeholder=\"Your Display Name\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\"><label for=\"displayName\" class=\"text-gray-200 ml-1\">Your Display Name: </label> <input type=\"text\" id=\"displayName\" name=\"displayName\" class=\"w-full border rounded-lg p-2 mt-2 mb-2 bg-white\" placeholder=\"Your Display Name\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -82,7 +82,15 @@ func JoinGamePage(game engine.Game, user models.User, notifications []models.Not
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Join Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4\" placeholder=\"Password\" required> <button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500\">JOIN </button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Join Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Password\" required><div class=\"flex flex-row items-center justify-between\"><div class=\"w-full\"><button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500\" onclick=\"loadSpinner()\">JOIN </button></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.SpinnerConstruct("spinner").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></form></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -92,7 +100,7 @@ func JoinGamePage(game engine.Game, user models.User, notifications []models.Not
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</section></div></main></body>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></main></body>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -100,7 +108,7 @@ func JoinGamePage(game engine.Game, user models.User, notifications []models.Not
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</html><script>\n        // ...\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</html><script>\n        let loadSpinner = () => {\n            if (document.getElementById(\"displayName\").value.trim() !== '' &&\n                document.getElementById(\"password\").value.trim() !== '') {\n                document.getElementById(\"spinner\").style.display = \"block\";\n            }\n        }\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

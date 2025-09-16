@@ -17,23 +17,33 @@ templ JoinGamePage(game engine.Game, user models.User, notifications []models.No
                         <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center mb-2">Joining Game: '{game.GetTitle()}'</h4>
                         <form method="post" action={ "/game/join/" + game.GetId() } >
                             <label for="displayName" class="text-gray-200 ml-1">Your Display Name: </label>
-                            <input type="text" id="displayName" name="displayName" class="w-full border rounded-lg p-2 mt-2 mb-2"
+                            <input type="text" id="displayName" name="displayName" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
                                 placeholder="Your Display Name" value={user.Name} required />
                             <label for="password" class="text-gray-200 ml-1">Join Password: </label>
-                            <input type="password" id="password" name="password" class="w-full border rounded-lg p-2 mt-2 mb-4"
+                            <input type="password" id="password" name="password" class="w-full border rounded-lg p-2 mt-2 mb-4 bg-white"
                                 placeholder="Password" required/>
-                            <button class="mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500"> JOIN </button>
+                            <div class="flex flex-row items-center justify-between">
+                                <div class="w-full">
+                                    <button class="mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500" onclick="loadSpinner()"> JOIN </button>
+                                </div>
+                                @components.SpinnerConstruct("spinner")
+                            </div>
                         </form>
-                        if len(notifications) > 0 {
-                            @components.Notifications(notifications)
-                        }
                     </section>
+                    if len(notifications) > 0 {
+                        @components.Notifications(notifications)
+                    }
                 </div>
             </main>
         </body>
         @components.Footer("Welcome")
     </html>
     <script>
-        // ...
+        let loadSpinner = () => {
+            if (document.getElementById("displayName").value.trim() !== '' &&
+                document.getElementById("password").value.trim() !== '') {
+                document.getElementById("spinner").style.display = "block";
+            }
+        }
     </script>
 }

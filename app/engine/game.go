@@ -8,7 +8,6 @@ import (
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 	"github.com/HielkeFellinger/dramatic_gopher/app/ecs"
-	"github.com/HielkeFellinger/dramatic_gopher/app/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -91,25 +90,11 @@ func (bg *BaseGame) IsRunning() bool {
 }
 
 func (bg *BaseGame) AuthenticateAsClient(password string) bool {
-	hashWord, err := utils.HashPassword(password)
-	if errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.ClientPassword), hashWord); err == nil && errBcrypt == nil {
-		return true
-	} else {
-		log.Println(password)
-		log.Println(err)
-		log.Println(errBcrypt)
-	}
-	return false
+	errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.ClientPassword), []byte(password))
+	return errBcrypt == nil
 }
 
 func (bg *BaseGame) AuthenticateAsLead(password string) bool {
-	hashWord, err := utils.HashPassword(password)
-	if errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.LeadPassword), hashWord); err == nil && errBcrypt == nil {
-		return true
-	} else {
-		log.Println(password)
-		log.Println(err)
-		log.Println(errBcrypt)
-	}
-	return false
+	errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.LeadPassword), []byte(password))
+	return errBcrypt == nil
 }
