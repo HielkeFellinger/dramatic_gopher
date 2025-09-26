@@ -11,19 +11,57 @@ templ Session(user models.User, game engine.Game) {
     <html lang="en">
         @components.Header()
         <body class="bg-gray-800">
-            <main class="min-h-screen min-h-screen min-w-screen">
-                <div class="container flex flex-row justify-center items-center min-h-screen min-w-screen">
-                    <div class="min-w-128 min-h-screen border-r border-gray-700 border-1 items-center justify-between">
+            <main class="min-h-screen min-h-screen min-w-screen" >
+                <div class="container flex flex-row justify-center items-center min-h-screen min-w-screen" hx-ext="ws" ws-connect={ "/session/" + game.GetId() + "/ws" }>
+                    <div id="chat_screen" class="min-w-128 min-h-screen border-r border-gray-700 border-1 items-center justify-between">
+                        CHAT
                     </div>
-                    <div class="flex min-h-screen justify-center items-center flex-grow">
+                    <div id="main_screen" class="flex min-h-screen flex-grow">
+                        <h4 class="font-bold text-gray-200"><span id="status"></span> Game : '{ game.GetId() }'</h4>
                     </div>
-                    <div class="min-w-128 min-h-screen border-l border-gray-700 border-1 items-center justify-between">
+                    <div id="detail_screen" class="min-w-128 min-h-screen border-l border-gray-700 border-1 items-center justify-between">
+                        DETAILS
                     </div>
                 </div>
             </main>
         </body>
     </html>
-    <script>
-        // Build the Socket connection
-    </script>
+    <script type="text/javascript" defer>
+            let status = document.getElementById('status');
+
+            let socket;
+            let elt;
+
+            document.body.addEventListener('htmx:wsConnecting', function (evt) {
+                console.log('connecting to server');
+                status.innerText = 'Connecting to ';
+                status.classList.remove('text-red-700')
+                status.classList.add('text-orange-700')
+                status.classList.remove('text-green-700')
+                status.setAttribute('data-status', 'connecting');
+            });
+            document.body.addEventListener('htmx:wsOpen', function(evt) {
+                console.log('connected');
+
+                socket = evt.detail.socketWrapper;
+                elt = evt.detail.elt;
+
+                status.innerText = 'Connected to ';
+                status.classList.remove('text-red-700')
+                status.classList.remove('text-orange-700')
+                status.classList.add('text-green-700')
+                status.setAttribute('data-status', 'connected');
+            });
+            document.body.addEventListener('htmx:wsClose', function(evt) {
+                console.log('disconnected');
+                console.warn(evt.detail)
+
+                status.innerText = 'Disconnected from ';
+                status.classList.add('text-red-700')
+                status.classList.remove('text-orange-700')
+                status.classList.remove('text-green-700')
+                status.setAttribute('data-status', 'disconnected');
+            });
+
+        </script>
 }

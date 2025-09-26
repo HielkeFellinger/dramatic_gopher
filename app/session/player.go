@@ -19,8 +19,19 @@ const (
 
 type Player struct {
 	Id          string
+	DisplayName string
 	conn        *websocket.Conn
-	GameSession *GameSession
+	gameSession *GameSession
+	send        chan []byte
+}
+
+func initPlayer(Id string, conn *websocket.Conn, GameSession *GameSession) *Player {
+	return &Player{
+		Id:          Id,
+		conn:        conn,
+		gameSession: GameSession,
+		send:        make(chan []byte, 256),
+	}
 }
 
 func (p *Player) readPump() {
@@ -28,12 +39,11 @@ func (p *Player) readPump() {
 		_ = p.conn.Close()
 	}()
 
-	p.conn.SetReadLimit(512)
-	_ = p.conn.SetReadDeadline(time.Now().Add(readWait))
-	p.conn.SetPongHandler(func(string) error {
-		_ = p.conn.SetReadDeadline(time.Now().Add(readWait))
-		return nil
-	})
+	//_ = p.Conn.SetReadDeadline(time.Now().Add(readWait))
+	//p.Conn.SetPongHandler(func(string) error {
+	//	_ = p.Conn.SetReadDeadline(time.Now().Add(readWait))
+	//	return nil
+	//})
 
 	for {
 		_, message, err := p.conn.ReadMessage()

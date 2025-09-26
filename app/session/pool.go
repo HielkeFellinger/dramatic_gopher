@@ -32,6 +32,16 @@ func (gp *gamePool) Run() {
 	}
 }
 
+func (gp *gamePool) getRunningSessionByGameId(id string) *GameSession {
+	for session, _ := range runningSessionPool.Sessions {
+		game := *session.Game
+		if game.GetId() == id {
+			return session
+		}
+	}
+	return nil
+}
+
 func AddGameToPool(leadId string, leadName string, game *engine.BaseGame) {
 	// Create & Add Lead user
 	newSession := initGameSession(leadId, leadName, game)
