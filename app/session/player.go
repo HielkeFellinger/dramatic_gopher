@@ -45,6 +45,8 @@ func (p *Player) readPump() {
 	//	return nil
 	//})
 
+	// https://github.com/gorilla/websocket/blob/main/examples/chat/client.go
+
 	for {
 		_, message, err := p.conn.ReadMessage()
 		if err != nil {

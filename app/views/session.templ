@@ -13,8 +13,8 @@ templ Session(user models.User, game engine.Game) {
         <body class="bg-gray-800">
             <main class="min-h-screen min-h-screen min-w-screen" >
                 <div class="container flex flex-row justify-center items-center min-h-screen min-w-screen" hx-ext="ws" ws-connect={ "/session/" + game.GetId() + "/ws" }>
-                    <div id="chat_screen" class="min-w-128 min-h-screen border-r border-gray-700 border-1 items-center justify-between">
-                        CHAT
+                    <div id="chat_screen" class="min-w-112 max-w-112 min-h-screen max-h-screen border-r border-gray-700 border-1">
+                        @components.FullChat()
                     </div>
                     <div id="main_screen" class="flex min-h-screen flex-grow">
                         <h4 class="font-bold text-gray-200"><span id="status"></span> Game : '{ game.GetId() }'</h4>
@@ -27,41 +27,43 @@ templ Session(user models.User, game engine.Game) {
         </body>
     </html>
     <script type="text/javascript" defer>
-            let status = document.getElementById('status');
+        if (lucide) {
+            lucide.createIcons();
+        }
 
-            let socket;
-            let elt;
+        let status = document.getElementById('status');
+        let socket;
+        let elt;
 
-            document.body.addEventListener('htmx:wsConnecting', function (evt) {
-                console.log('connecting to server');
-                status.innerText = 'Connecting to ';
-                status.classList.remove('text-red-700')
-                status.classList.add('text-orange-700')
-                status.classList.remove('text-green-700')
-                status.setAttribute('data-status', 'connecting');
-            });
-            document.body.addEventListener('htmx:wsOpen', function(evt) {
-                console.log('connected');
+        document.body.addEventListener('htmx:wsConnecting', function (evt) {
+            console.log('connecting to server');
+            status.innerText = 'Connecting to ';
+            status.classList.add('text-orange-700')
+            status.classList.remove('text-red-700')
+            status.classList.remove('text-green-700')
+            status.setAttribute('data-status', 'connecting');
+        });
+        document.body.addEventListener('htmx:wsOpen', function(evt) {
+            console.log('connected');
 
-                socket = evt.detail.socketWrapper;
-                elt = evt.detail.elt;
+            socket = evt.detail.socketWrapper;
+            elt = evt.detail.elt;
 
-                status.innerText = 'Connected to ';
-                status.classList.remove('text-red-700')
-                status.classList.remove('text-orange-700')
-                status.classList.add('text-green-700')
-                status.setAttribute('data-status', 'connected');
-            });
-            document.body.addEventListener('htmx:wsClose', function(evt) {
-                console.log('disconnected');
-                console.warn(evt.detail)
+            status.innerText = 'Connected to ';
+            status.classList.add('text-green-700')
+            status.classList.remove('text-red-700')
+            status.classList.remove('text-orange-700')
+            status.setAttribute('data-status', 'connected');
+        });
+        document.body.addEventListener('htmx:wsClose', function(evt) {
+            console.log('disconnected');
+            console.warn(evt.detail)
 
-                status.innerText = 'Disconnected from ';
-                status.classList.add('text-red-700')
-                status.classList.remove('text-orange-700')
-                status.classList.remove('text-green-700')
-                status.setAttribute('data-status', 'disconnected');
-            });
-
-        </script>
+            status.innerText = 'Disconnected from ';
+            status.classList.add('text-red-700')
+            status.classList.remove('text-orange-700')
+            status.classList.remove('text-green-700')
+            status.setAttribute('data-status', 'disconnected');
+        });
+    </script>
 }

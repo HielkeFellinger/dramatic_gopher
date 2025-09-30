@@ -24,7 +24,7 @@ templ JoinGamePage(game engine.Game, user models.User, notifications []models.No
                                 placeholder="Password" required/>
                             <div class="flex flex-row items-center justify-between">
                                 <div class="w-full">
-                                    <button class="mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500" onclick="loadSpinner()"> JOIN </button>
+                                    <button class="mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer" onclick="loadSpinner()"> JOIN </button>
                                 </div>
                                 @components.SpinnerConstruct("spinner")
                             </div>
@@ -39,11 +39,17 @@ templ JoinGamePage(game engine.Game, user models.User, notifications []models.No
         @components.Footer("Welcome")
     </html>
     <script>
-        let loadSpinner = () => {
+        function loadSpinner() {
             if (document.getElementById("displayName").value.trim() !== '' &&
                 document.getElementById("password").value.trim() !== '') {
                 document.getElementById("spinner").style.display = "block";
             }
         }
+        function hideSpinner() {
+            document.getElementById("spinner").style.display = "none";
+        }
+
+        window.addEventListener("pageshow", hideSpinner);
+        window.addEventListener("popstate", hideSpinner);
     </script>
 }

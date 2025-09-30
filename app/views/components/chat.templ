@@ -1,0 +1,63 @@
+package components
+
+templ FullChat() {
+    <div class="min-w-full min-h-screen max-h-screen flex flex-col text-sm">
+        <div id="chat_header" class="m-2 flex-none min-h-2">
+            <button class="p-2 mt-1 mb-1 rounded-lg text-white bg-gray-500 cursor-pointer" disabled>
+                <i data-lucide="save"></i>
+            </button>
+        </div>
+        <div id="chat_content" class="ml-2 mr-2 max-w-full grow border rounded-lg border-gray-700 bg-gray-700 overflow-x-scroll text-white">
+
+        </div>
+        <div id="chat_footer" class="ml-2 mr-2 not-first:flex-none min-h-2">
+            @ChatBox()
+        </div>
+    </div>
+}
+
+templ ChatMessageLeft(showUser bool, message string, username string, time string) {
+    <div class="m-2 max-w-full flex flex-row">
+        <div class="max-w-4/5 rounded-lg border p-2">
+            if showUser {
+            <b>{ username }:</b>
+            }
+            <p class="max-w-full text-wrap break-words">{ message }</p>
+        </div>
+        <div class="grow p-2 text-right">{ time }</div>
+    </div>
+}
+
+templ ChatMessageRight(showUser bool, message string, username string, time string) {
+    <div class="m-2 max-w-full flex flex-row-reverse">
+        <div class="max-w-4/5 rounded-lg border p-2">
+            if showUser {
+            <b>{ username }:</b>
+            }
+            <p class="max-w-full text-wrap break-words">{ message }</p>
+        </div>
+        <div class="grow p-2 text-left">{ time }</div>
+    </div>
+}
+
+templ ChatBox() {
+    <form
+    hx-swap="beforeend"
+    hx-vals='{"type": "send_chat_message"}'
+    hx-target="#userGuessBox"
+    ws-send
+    >
+    <div id="chat_box" class="min-w-full flex flex-row">
+        <div class="chat-box flex flex-col flex-auto justify-between">
+            <label>
+                <input type="text" name="message" class="w-full min-h-11 p-2 mt-2 mb-2 rounded-lg bg-white"/>
+            </label>
+        </div>
+        <div class="ml-2 flex-none">
+            <button id="send_chat" type="submit" class="min-h-11 p-2 mt-2 mb-2 border border-blue-500 rounded-lg text-white bg-blue-500 cursor-pointer">
+                <i data-lucide="send"></i>
+            </button>
+        </div>
+    </div>
+    </form>
+}

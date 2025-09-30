@@ -56,7 +56,15 @@ func Session(user models.User, game engine.Game) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><div id=\"chat_screen\" class=\"min-w-128 min-h-screen border-r border-gray-700 border-1 items-center justify-between\">CHAT</div><div id=\"main_screen\" class=\"flex min-h-screen flex-grow\"><h4 class=\"font-bold text-gray-200\"><span id=\"status\"></span> Game : '")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><div id=\"chat_screen\" class=\"min-w-112 max-w-112 min-h-screen max-h-screen border-r border-gray-700 border-1\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.FullChat().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div><div id=\"main_screen\" class=\"flex min-h-screen flex-grow\"><h4 class=\"font-bold text-gray-200\"><span id=\"status\"></span> Game : '")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -69,7 +77,7 @@ func Session(user models.User, game engine.Game) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "'</h4></div><div id=\"detail_screen\" class=\"min-w-128 min-h-screen border-l border-gray-700 border-1 items-center justify-between\">DETAILS</div></div></main></body></html><script type=\"text/javascript\" defer>\n            let status = document.getElementById('status');\n\n            let socket;\n            let elt;\n\n            document.body.addEventListener('htmx:wsConnecting', function (evt) {\n                console.log('connecting to server');\n                status.innerText = 'Connecting to ';\n                status.classList.remove('text-red-700')\n                status.classList.add('text-orange-700')\n                status.classList.remove('text-green-700')\n                status.setAttribute('data-status', 'connecting');\n            });\n            document.body.addEventListener('htmx:wsOpen', function(evt) {\n                console.log('connected');\n\n                socket = evt.detail.socketWrapper;\n                elt = evt.detail.elt;\n\n                status.innerText = 'Connected to ';\n                status.classList.remove('text-red-700')\n                status.classList.remove('text-orange-700')\n                status.classList.add('text-green-700')\n                status.setAttribute('data-status', 'connected');\n            });\n            document.body.addEventListener('htmx:wsClose', function(evt) {\n                console.log('disconnected');\n                console.warn(evt.detail)\n\n                status.innerText = 'Disconnected from ';\n                status.classList.add('text-red-700')\n                status.classList.remove('text-orange-700')\n                status.classList.remove('text-green-700')\n                status.setAttribute('data-status', 'disconnected');\n            });\n\n        </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "'</h4></div><div id=\"detail_screen\" class=\"min-w-128 min-h-screen border-l border-gray-700 border-1 items-center justify-between\">DETAILS</div></div></main></body></html><script type=\"text/javascript\" defer>\n        if (lucide) {\n            lucide.createIcons();\n        }\n\n        let status = document.getElementById('status');\n        let socket;\n        let elt;\n\n        document.body.addEventListener('htmx:wsConnecting', function (evt) {\n            console.log('connecting to server');\n            status.innerText = 'Connecting to ';\n            status.classList.add('text-orange-700')\n            status.classList.remove('text-red-700')\n            status.classList.remove('text-green-700')\n            status.setAttribute('data-status', 'connecting');\n        });\n        document.body.addEventListener('htmx:wsOpen', function(evt) {\n            console.log('connected');\n\n            socket = evt.detail.socketWrapper;\n            elt = evt.detail.elt;\n\n            status.innerText = 'Connected to ';\n            status.classList.add('text-green-700')\n            status.classList.remove('text-red-700')\n            status.classList.remove('text-orange-700')\n            status.setAttribute('data-status', 'connected');\n        });\n        document.body.addEventListener('htmx:wsClose', function(evt) {\n            console.log('disconnected');\n            console.warn(evt.detail)\n\n            status.innerText = 'Disconnected from ';\n            status.classList.add('text-red-700')\n            status.classList.remove('text-orange-700')\n            status.classList.remove('text-green-700')\n            status.setAttribute('data-status', 'disconnected');\n        });\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
