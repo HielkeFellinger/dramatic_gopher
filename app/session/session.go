@@ -5,13 +5,14 @@ import (
 	"time"
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/engine"
+	"github.com/HielkeFellinger/dramatic_gopher/app/models"
 )
 
 type GameSession struct {
 	Game       *engine.BaseGame
 	Register   chan *Player
 	Unregister chan *Player
-	Events     chan requestMessage
+	Events     chan models.BasicRequestMessage
 	Players    map[*Player]bool
 	Lead       *Player
 
@@ -25,7 +26,7 @@ func initGameSession(leadId string, leadName string, game *engine.BaseGame) *Gam
 		Game:                 game,
 		Register:             make(chan *Player),
 		Unregister:           make(chan *Player),
-		Events:               make(chan requestMessage),
+		Events:               make(chan models.BasicRequestMessage),
 		Players:              make(map[*Player]bool),
 		leadId:               leadId,
 		authenticatedUserIds: make(map[string]string),
@@ -56,7 +57,7 @@ func (gs *GameSession) Run() {
 
 		case message := <-gs.Events:
 			// @TODO Handle Events
-			log.Println(message)
+			log.Printf("received: %v", message)
 
 		case <-checkIfEmptyTimer.C:
 			// Clear session if session is empty during timeout check

@@ -1,9 +1,11 @@
 package session
 
 import (
+	"encoding/json"
 	"log"
 	"time"
 
+	"github.com/HielkeFellinger/dramatic_gopher/app/models"
 	"github.com/gorilla/websocket"
 )
 
@@ -53,7 +55,20 @@ func (p *Player) readPump() {
 			log.Println("read error:", err)
 			break
 		}
+
+		// Attempt to parse message
+		var parsedMessage models.BasicRequestMessage
 		log.Printf("received: %s", message)
+		if err = json.Unmarshal(message, &parsedMessage); err != nil {
+			log.Println("Could not parse message:", err)
+			break
+		}
+		parsedMessage.UserId = p.Id
+
+		// Check Channel & Send
+		if p.gameSession != nil && p.gameSession.Events != nil {
+			p.gameSession.Events <- parsedMessage
+		}
 	}
 }
 
@@ -66,6 +81,23 @@ func (p *Player) writePump() {
 	}()
 	for {
 		select {
+		case message, ok := <-p.send:
+			// @TODO fix ignoring returns
+			_ = p.conn.SetWriteDeadline(time.Now().Add(writeWait))
+			if !ok {
+				_ = p.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+
+			writer, err := p.conn.NextWriter(websocket.TextMessage)
+			if err != nil {
+				return
+			}
+			_, _ = writer.Write(message)
+
+			if CloseErr := writer.Close(); CloseErr != nil {
+				return
+			}
 		case <-ticker.C:
 			pingErr := p.conn.SetWriteDeadline(time.Now().Add(writeWait))
 			if pingErr != nil {

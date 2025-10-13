@@ -31,6 +31,7 @@ templ Session(user models.User, game engine.Game) {
             lucide.createIcons();
         }
 
+        let reconnectTimer = 0;
         let status = document.getElementById('status');
         let socket;
         let elt;
@@ -38,6 +39,9 @@ templ Session(user models.User, game engine.Game) {
         document.body.addEventListener('htmx:wsConnecting', function (evt) {
             console.log('connecting to server');
             status.innerText = 'Connecting to ';
+
+            // @TODO Implement incremental back-off
+
             status.classList.add('text-orange-700')
             status.classList.remove('text-red-700')
             status.classList.remove('text-green-700')
@@ -45,7 +49,7 @@ templ Session(user models.User, game engine.Game) {
         });
         document.body.addEventListener('htmx:wsOpen', function(evt) {
             console.log('connected');
-
+            reconnectTimer = 0;
             socket = evt.detail.socketWrapper;
             elt = evt.detail.elt;
 
@@ -58,6 +62,11 @@ templ Session(user models.User, game engine.Game) {
         document.body.addEventListener('htmx:wsClose', function(evt) {
             console.log('disconnected');
             console.warn(evt.detail)
+            reconnectTimer++;
+
+            if (reconnectTimer > 5) {
+                window.location = "/game/join/{{ game.GetId() }}"
+            }
 
             status.innerText = 'Disconnected from ';
             status.classList.add('text-red-700')
@@ -65,5 +74,9 @@ templ Session(user models.User, game engine.Game) {
             status.classList.remove('text-green-700')
             status.setAttribute('data-status', 'disconnected');
         });
+
+        function reAuthUserToGame(gameId) {
+
+        }
     </script>
 }
