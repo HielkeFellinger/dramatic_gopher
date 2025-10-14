@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 	"github.com/HielkeFellinger/dramatic_gopher/app/initializers"
 	"github.com/HielkeFellinger/dramatic_gopher/app/routes"
 	"github.com/gin-gonic/gin"
-	"log"
 )
 
 var engine *gin.Engine
@@ -15,6 +16,7 @@ func init() {
 	log.Println("INIT: Starting Initialisation of Dramatic Gopher...")
 	initializers.LoadEnvVariables()
 	config.InitConfig()
+	initializers.LoadDatabase()
 	log.Println("INIT: Done. Initialisation Finished...")
 }
 

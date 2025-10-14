@@ -8,11 +8,13 @@ import (
 var CurrentConfig *Config
 
 type Config struct {
-	CryptCost        string
-	JwtSecret        string
-	Host             string
-	Port             string
-	CampaignSavesDir string
+	CryptCost            string
+	JwtSecret            string
+	Host                 string
+	Port                 string
+	CampaignSavesDir     string
+	DatabaseFilePath     string
+	DefaultAdminPassword string
 }
 
 func InitConfig() *Config {
@@ -27,7 +29,12 @@ func InitConfig() *Config {
 	configInit.Port = os.Getenv("PORT")
 	configInit.JwtSecret = os.Getenv("JWT_SECRET")
 	configInit.CampaignSavesDir = os.Getenv("CAMPAIGN_SAVES_DIR")
+	configInit.DatabaseFilePath = os.Getenv("DATABASE_FILE_PATH")
+	configInit.DefaultAdminPassword = os.Getenv("DEFAULT_ADMIN_PASSWORD")
 
+	if len(configInit.DefaultAdminPassword) < 5 {
+		log.Panic("CONFIG: Invalid (to small <5 chars) or empty Default Admin Password (env.DEFAULT_ADMIN_PASSWORD)")
+	}
 	if len(configInit.JwtSecret) < 8 {
 		log.Panic("CONFIG: Invalid (to small <8 chars) or empty JWT secret (env.JWT_SECRET)")
 	}
