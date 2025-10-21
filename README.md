@@ -10,5 +10,5 @@ GoTH - stack
 - [Gin Web Framework](https://gin-gonic.com/), [Gorilla](https://pkg.go.dev/github.com/gorilla/websocket@v1.5.3) (Websockets)
 
 Recommendations:
-- Templ ([install](https://templ.guide/quick-start/installation)) run: ```templ generate --watch```
-- Air ([install](https://github.com/air-verse/air)) run ```air```
+- [Templ](https://templ.guide/): install/update: ```go install github.com/a-h/templ/cmd/templ@latest``` run: ```templ generate --watch```
+- [Air](https://github.com/air-verse/air): install/update: ```go install github.com/air-verse/air@latest``` run ```air```

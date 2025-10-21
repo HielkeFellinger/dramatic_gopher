@@ -50,11 +50,6 @@ func LoadJoinGamePage() gin.HandlerFunc {
 	}
 }
 
-type joinGameRequest struct {
-	DisplayName string `form:"displayName"`
-	Password    string `form:"password"`
-}
-
 func HandleJoinGame() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Load Info
@@ -71,8 +66,11 @@ func HandleJoinGame() gin.HandlerFunc {
 		}
 
 		// Validate Request
-		var joinGameReq joinGameRequest
-		bindErr := c.Bind(&joinGameReq)
+		var joinGameRequest struct {
+			DisplayName string `form:"displayName"`
+			Password    string `form:"password"`
+		}
+		bindErr := c.Bind(&joinGameRequest)
 		if bindErr != nil {
 			noBindErr := models.NewNotification(models.Error, "Could not parse request, please retry")
 			notifications = append(notifications, noBindErr)
@@ -80,10 +78,10 @@ func HandleJoinGame() gin.HandlerFunc {
 
 		if len(notifications) == 0 {
 			// Attempt to authenticate
-			if game.AuthenticateAsLead(joinGameReq.Password) {
+			if game.AuthenticateAsLead(joinGameRequest.Password) {
 				if !game.IsRunning() {
 					// Start game - OK
-					session.AddGameToPool(user.Id, joinGameReq.DisplayName, game)
+					session.AddGameToPool(user.Id, joinGameRequest.DisplayName, game)
 					c.Redirect(http.StatusFound, "/game/session/"+game.Id)
 					return
 				} else {
@@ -91,12 +89,12 @@ func HandleJoinGame() gin.HandlerFunc {
 						notifications = append(notifications,
 							models.NewNotification(models.Error, "Another user has already joined this game as Lead!"))
 					} else {
-						// OK
+						// Join running game - OK
 						c.Redirect(http.StatusFound, "/game/session/"+game.Id)
 						return
 					}
 				}
-			} else if game.AuthenticateAsClient(joinGameReq.Password) {
+			} else if game.AuthenticateAsClient(joinGameRequest.Password) {
 				if !game.IsRunning() {
 					notifications = append(notifications,
 						models.NewNotification(models.Error, "Game is not running, not allowed to start game if not lead!"))
@@ -105,8 +103,8 @@ func HandleJoinGame() gin.HandlerFunc {
 						notifications = append(notifications,
 							models.NewNotification(models.Error, "User is already linked to game as Lead; using client password is blocked"))
 					} else {
-						// OK
-						if !session.AddUserIdAndNameToAccessGame(user.Id, joinGameReq.DisplayName, game.GetId()) {
+						// Join running game - OK
+						if !session.AddUserIdAndNameToAccessGame(user.Id, joinGameRequest.DisplayName, game.GetId()) {
 							notifications = append(notifications,
 								models.NewNotification(models.Error, "Failed to add you to the game allow list, please retry"))
 						} else {
@@ -120,6 +118,7 @@ func HandleJoinGame() gin.HandlerFunc {
 			}
 		}
 
+		// FAILURE
 		if renderErr := render(c, http.StatusOK, views.JoinGamePage(game, user, notifications)); renderErr != nil {
 			return
 		}

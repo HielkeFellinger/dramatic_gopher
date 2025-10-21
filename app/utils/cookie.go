@@ -15,8 +15,9 @@ import (
 const SessionCookieName = "Session"
 
 type SessionCookieContent struct {
-	ID        string
-	ExpiresAt int64
+	ID          string
+	DisplayName string
+	ExpiresAt   int64
 }
 
 func NewSessionCookieContent() SessionCookieContent {

@@ -9,13 +9,18 @@ import (
 
 func HandlePageRoutes(router *gin.Engine) {
 
-	// Pages
 	router.GET("/", middleware.EnsureUserValuesIsSet, pages.Homepage())
+
+	// Pages
 	router.GET("/game/new", middleware.EnsureUserValuesIsSet, pages.Homepage())
-	router.GET("/game/load", middleware.EnsureUserValuesIsSet, pages.LoadGamePage())
-	router.GET("/game/join/:game_id", middleware.EnsureUserValuesIsSet, pages.LoadJoinGamePage())
-	router.POST("/game/join/:game_id", middleware.EnsureUserValuesIsSet, pages.HandleJoinGame())
+	router.GET("/game/load", middleware.EnsureUserIsLoggedIn, pages.LoadGamePage())
+	router.GET("/game/join/:game_id", middleware.EnsureUserIsLoggedIn, pages.LoadJoinGamePage())
+	router.POST("/game/join/:game_id", middleware.EnsureUserIsLoggedIn, pages.HandleJoinGame())
 	router.GET("/game/session/:game_id", middleware.EnsureUserValueIsSetAndAllowedToAccessGame, pages.LoadGameSessionPage())
+
+	// Users
+	router.GET("/user/login", middleware.EnsureUserValuesIsSet, pages.LoadLoginPage())
+	router.POST("/user/login", middleware.EnsureUserValuesIsSet, pages.HandleLoginPage())
 
 	// Session
 	router.GET("/session/:game_id/ws", middleware.EnsureUserValueIsSetAndAllowedToAccessGame, session.HandleWebsocket)

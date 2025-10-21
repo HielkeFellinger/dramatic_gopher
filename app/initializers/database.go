@@ -33,7 +33,7 @@ func loadDefaultTables(db *sql.DB) {
 	sqlUsersStmt := `
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL,
+        name TEXT NOT NULL UNIQUE,
         display_name TEXT NOT NULL,
         password TEXT NOT NULL
     );
@@ -46,7 +46,7 @@ func loadDefaultTables(db *sql.DB) {
 	sqlCampaignsStmt := `
     CREATE TABLE IF NOT EXISTS campaigns (
         id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL
+        name TEXT NOT NULL UNIQUE 
     );
     `
 	if _, err := db.Exec(sqlCampaignsStmt); err != nil {
