@@ -81,6 +81,8 @@ func GetRunningGamePointer(id string) *engine.BaseGame {
 }
 
 func IsUserIdAllowedToAccessGame(userId string, gameId string) bool {
+	// @TODO fix
+
 	for session, _ := range runningSessionPool.Sessions {
 		if session.Game.GetId() == gameId {
 			return session.isUserIdAllowedToAccessSession(userId)

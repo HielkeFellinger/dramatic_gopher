@@ -47,12 +47,12 @@ func Homepage(user models.User) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if user.Id != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Start a new game!</h4><button onclick=\"window.location = '/game/new';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500\">CREATE NEW GAME </button> <button onclick=\"window.location = '/game/load';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500\">LOAD A GAME </button>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Start a new game!</h4><button onclick=\"window.location = '/game/new';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>CREATE NEW GAME</b></button> <button onclick=\"window.location = '/game/load';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>LOAD A GAME</b></button><br>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Get Started!</h4><button onclick=\"window.location = '/user/login';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500\">LOGIN </button>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Get Started!</h4><button onclick=\"window.location = '/user/login';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>LOGIN</b></button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

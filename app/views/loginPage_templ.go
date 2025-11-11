@@ -55,7 +55,7 @@ func LoginPage(user models.User, notifications []models.Notification) templ.Comp
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Password\" required><div class=\"flex flex-row items-center justify-between\"><div class=\"w-full\"><button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer\" onclick=\"loadSpinner()\">LOGIN </button></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Password\" required><div class=\"flex flex-row items-center justify-between\"><div class=\"w-full\"><button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                            hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\" onclick=\"loadSpinner()\"><b>LOGIN</b></button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
