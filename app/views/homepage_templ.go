@@ -47,17 +47,42 @@ func Homepage(user models.User) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if user.Id != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Start a new game!</h4><button onclick=\"window.location = '/game/new';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>CREATE NEW GAME</b></button> <button onclick=\"window.location = '/game/load';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>LOAD A GAME</b></button><br>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Have a nice game!</h4>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if user.Role == "admin" {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<button onclick=\"window.location = '/game/new';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>CREATE NEW GAME</b></button>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, " <button onclick=\"window.location = '/game/load';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if user.Role != "admin" {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<b>JOIN A GAME</b>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			} else {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<b>LOAD A GAME</b>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</button><br>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Get Started!</h4><button onclick=\"window.location = '/user/login';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>LOGIN</b></button>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center\">Get Started!</h4><button onclick=\"window.location = '/user/login';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>LOGIN</b></button> <button onclick=\"window.location = '/user/register';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>REGISTER</b></button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</section></div></main></body>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</section></div></main></body>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -65,7 +90,7 @@ func Homepage(user models.User) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</html><script>\n        // ...\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</html><script>\n        // ...\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

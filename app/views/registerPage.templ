@@ -1,0 +1,62 @@
+package views
+
+import (
+	"github.com/HielkeFellinger/dramatic_gopher/app/views/components"
+    "github.com/HielkeFellinger/dramatic_gopher/app/models"
+)
+
+templ RegisterPage(user models.User, notifications []models.Notification) {
+    <!DOCTYPE html>
+    <html lang="en">
+        @components.Header()
+        <body class="bg-gray-800">
+            <main class="min-h-screen w-full">
+                <div class="mt-6 w-full flex justify-center items-center flex-col">
+                    <section class="mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg">
+                        <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center mb-2">Register a new Account</h4>
+                        <form method="post" action="/user/register/">
+                            <label for="username" class="text-gray-200 ml-1">Username: </label>
+                            <input type="text" id="username" name="username" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
+                                   placeholder="Username" value={user.Name} required />
+                            <label for="displayName" class="text-gray-200 ml-1">Your Display Name: </label>
+                            <input type="text" id="displayName" name="displayName" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
+                                   placeholder="Your Default Display Name" value={user.Name} required />
+                            <label for="password" class="text-gray-200 ml-1">Password: </label>
+                            <input type="password" id="password" name="password" class="w-full border rounded-lg p-2 mt-2 mb-4 bg-white"
+                                placeholder="Password" required/>
+                            <label for="passwordCheck" class="text-gray-200 ml-1">Password: </label>
+                            <input type="password" id="passwordCheck" name="passwordCheck" class="w-full border rounded-lg p-2 mt-2 mb-4 bg-white"
+                                   placeholder="Confirm Password" required/>
+                            <div class="flex flex-row items-center justify-between">
+                                <div class="w-full">
+                                    <button class="mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer
+                                            hover:bg-blue-800 focus:ring-2 focus:ring-blue-300"
+                                            onclick="loadSpinner()"><b>REGISTER</b></button>
+                                </div>
+                                @components.SpinnerConstruct("spinner")
+                            </div>
+                        </form>
+                    </section>
+                    if len(notifications) > 0 {
+                        @components.Notifications(notifications)
+                    }
+                </div>
+            </main>
+        </body>
+        @components.Footer("Welcome")
+    </html>
+    <script>
+        function loadSpinner() {
+            if (document.getElementById("username").value.trim() !== '' &&
+                document.getElementById("password").value.trim() !== '') {
+                document.getElementById("spinner").style.display = "block";
+            }
+        }
+        function hideSpinner() {
+            document.getElementById("spinner").style.display = "none";
+        }
+
+        window.addEventListener("pageshow", hideSpinner);
+        window.addEventListener("popstate", hideSpinner);
+    </script>
+}

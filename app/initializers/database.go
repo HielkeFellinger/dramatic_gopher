@@ -35,7 +35,8 @@ func loadDefaultTables(db *sql.DB) {
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE,
         display_name TEXT NOT NULL,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        role TEXT NOT NULL
     );
     `
 	if _, err := db.Exec(sqlUsersStmt); err != nil {
@@ -46,7 +47,9 @@ func loadDefaultTables(db *sql.DB) {
 	sqlCampaignsStmt := `
     CREATE TABLE IF NOT EXISTS campaigns (
         id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL UNIQUE 
+        name TEXT NOT NULL UNIQUE,
+        state TEXT,
+	    password TEXT NOT NULL
     );
     `
 	if _, err := db.Exec(sqlCampaignsStmt); err != nil {
@@ -58,6 +61,7 @@ func loadDefaultTables(db *sql.DB) {
     CREATE TABLE IF NOT EXISTS campaign_access (
         id INTEGER PRIMARY KEY,
         user_id INTEGER,
+        display_name TEXT NOT NULL,
         campaign_id INTEGER,
         role TEXT NOT NULL,
 	    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -74,8 +78,8 @@ func loadDefaultContent(db *sql.DB) {
 	log.Println("	Ensuring default data is available")
 
 	sqlEnsureDefaultAdminStmt := `
-	INSERT INTO users(id, name, display_name, password) 
-	SELECT 1, 'admin', 'admin', ?
+	INSERT INTO users(id, name, display_name, role, password) 
+	SELECT 1, 'admin', 'admin', 'admin', ?
 	WHERE NOT EXISTS (SELECT 1 FROM users WHERE id = 1);
 	`
 	defaultAdminPassword, err := utils.HashPassword(config.CurrentConfig.DefaultAdminPassword)

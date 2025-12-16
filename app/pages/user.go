@@ -52,7 +52,11 @@ func HandleLoginPage() gin.HandlerFunc {
 				if errBcrypt := bcrypt.CompareHashAndPassword([]byte(authUser.Password), []byte(loggingRequest.Password)); errBcrypt != nil {
 					notifications = append(notifications, models.NewNotification(models.Error, "Invalid username or password"))
 				} else {
-					var authCookieContent = utils.SessionCookieContent{ID: authUser.Id, DisplayName: authUser.DisplayName}
+					var authCookieContent = utils.SessionCookieContent{
+						ID:          authUser.Id,
+						Role:        authUser.Role,
+						DisplayName: authUser.DisplayName,
+					}
 					if errCookie := utils.SetSessionJWTCookie(authCookieContent, c); errCookie != nil {
 						notifications = append(notifications, models.NewNotification(models.Error, "Failed to create Cookie"))
 					} else {
@@ -66,6 +70,18 @@ func HandleLoginPage() gin.HandlerFunc {
 
 		// FAILURE
 		err := render(c, http.StatusBadRequest, views.LoginPage(user, notifications))
+		if err != nil {
+			return
+		}
+	}
+}
+
+func LoadRegisterPage() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		notifications := getNotifications(c)
+		user := c.MustGet("user").(models.User)
+
+		err := render(c, http.StatusOK, views.RegisterPage(user, notifications))
 		if err != nil {
 			return
 		}

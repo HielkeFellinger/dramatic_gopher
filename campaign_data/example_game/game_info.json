@@ -1,10 +1,5 @@
 {
   "title": "Example Game",
   "description": "Some Test Game",
-  "saveFile": "saves/save_file.json",
-  "crypto": {
-    "leadPassword": "$2a$16$KxmNOyTyWScR6ixZV1Hte.JV5OSyRlVKKPnn73bpIS1dOTuwQ6xBK",
-    "clientPassword": "$2a$16$6yymNGWWrMMdgPnTgmu7pO48GF3CCUS.VMq57tWE61vAttvz.JVyC",
-    "description": "Default: 'client' for client, 'lead' for lead."
-  }
+  "saveFile": "saves/save_file.json"
 }

@@ -16,14 +16,14 @@ func (us *userService) GetUserByUsername(username string) (User, error) {
 	sqlGetUserByUsername := `SELECT * FROM users WHERE name = ?`
 
 	result := DB.QueryRow(sqlGetUserByUsername, username)
-	return user, result.Scan(&user.Id, &user.Name, &user.DisplayName, &user.Password)
+	return user, result.Scan(&user.Id, &user.Name, &user.DisplayName, &user.Password, &user.Role)
 }
 
 func (us *userService) GetUserById(userId int64) (User, error) {
 	user := User{}
 	sqlGetUserById := `SELECT * FROM users WHERE id = ?`
 	result := DB.QueryRow(sqlGetUserById, userId)
-	return user, result.Scan(&user.Id, &user.Name, &user.DisplayName, &user.Password)
+	return user, result.Scan(&user.Id, &user.Name, &user.DisplayName, &user.Password, &user.Role)
 }
 
 func (cs *campaignService) GetCampaignById(campaignId int64) (Campaign, error) {
@@ -31,7 +31,7 @@ func (cs *campaignService) GetCampaignById(campaignId int64) (Campaign, error) {
 	sqlGetCampaignById := `SELECT * FROM campaigns WHERE id = ?`
 
 	result := DB.QueryRow(sqlGetCampaignById, campaignId)
-	return campaign, result.Scan(&campaign.Id, &campaign.Name)
+	return campaign, result.Scan(&campaign.Id, &campaign.Name, &campaign.State, &campaign.Password)
 }
 
 func (cs *campaignService) GetCampaignsByUserId(userId int64) ([]Campaign, error) {
@@ -47,5 +47,5 @@ func (cs *campaignService) CreateCampaign(campaign Campaign) (Campaign, error) {
 	sqlCreateCampaign := `INSERT INTO campaigns (name) VALUES (?) RETURNING *`
 
 	result := DB.QueryRow(sqlCreateCampaign, campaign.Name)
-	return returnCampaign, result.Scan(&returnCampaign.Id, &returnCampaign.Name)
+	return returnCampaign, result.Scan(&returnCampaign.Id, &returnCampaign.Name, &returnCampaign.State, &returnCampaign.Password)
 }

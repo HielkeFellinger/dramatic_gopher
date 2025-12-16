@@ -15,6 +15,7 @@ type Config struct {
 	CampaignSavesDir     string
 	DatabaseFilePath     string
 	DefaultAdminPassword string
+	DefaultGamePassword  string
 }
 
 func InitConfig() *Config {
@@ -31,9 +32,13 @@ func InitConfig() *Config {
 	configInit.CampaignSavesDir = os.Getenv("CAMPAIGN_SAVES_DIR")
 	configInit.DatabaseFilePath = os.Getenv("DATABASE_FILE_PATH")
 	configInit.DefaultAdminPassword = os.Getenv("DEFAULT_ADMIN_PASSWORD")
+	configInit.DefaultGamePassword = os.Getenv("DEFAULT_GAME_PASSWORD")
 
 	if len(configInit.DefaultAdminPassword) < 5 {
 		log.Panic("CONFIG: Invalid (to small <5 chars) or empty Default Admin Password (env.DEFAULT_ADMIN_PASSWORD)")
+	}
+	if len(configInit.DefaultGamePassword) < 5 {
+		log.Panic("CONFIG: Invalid (to small <5 chars) or empty Default Game Password (env.DEFAULT_GAME_PASSWORD)")
 	}
 	if len(configInit.JwtSecret) < 8 {
 		log.Panic("CONFIG: Invalid (to small <8 chars) or empty JWT secret (env.JWT_SECRET)")

@@ -9,7 +9,6 @@ import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 )
 
 const SessionCookieName = "Session"
@@ -17,13 +16,16 @@ const SessionCookieName = "Session"
 type SessionCookieContent struct {
 	ID          string
 	DisplayName string
+	Role        string
 	ExpiresAt   int64
 }
 
 func NewSessionCookieContent() SessionCookieContent {
 	return SessionCookieContent{
-		ID:        uuid.NewString(),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		ID:          "",
+		DisplayName: "",
+		Role:        "",
+		ExpiresAt:   time.Now().Add(time.Hour * 24).Unix(),
 	}
 }
 
@@ -33,8 +35,10 @@ func SetSessionJWTCookie(content SessionCookieContent, c *gin.Context) error {
 
 	// Generate a JWT token and Sign
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
-		"ID":        content.ID,
-		"ExpiresAt": content.ExpiresAt,
+		"ID":          content.ID,
+		"DisplayName": content.DisplayName,
+		"Role":        content.Role,
+		"ExpiresAt":   content.ExpiresAt,
 	})
 	tokenString, err := token.SignedString([]byte(config.CurrentConfig.JwtSecret))
 
@@ -74,8 +78,10 @@ func ParseSessionCookie(c *gin.Context) (SessionCookieContent, error) {
 
 			// Get session, if exists
 			session = SessionCookieContent{
-				ID:        claims["ID"].(string),
-				ExpiresAt: int64(claims["ExpiresAt"].(float64)),
+				ID:          claims["ID"].(string),
+				DisplayName: claims["DisplayName"].(string),
+				Role:        claims["Role"].(string),
+				ExpiresAt:   int64(claims["ExpiresAt"].(float64)),
 			}
 		}
 	}

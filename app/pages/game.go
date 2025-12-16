@@ -78,44 +78,44 @@ func HandleJoinGame() gin.HandlerFunc {
 
 		if len(notifications) == 0 {
 			// Attempt to authenticate
-			if game.AuthenticateAsLead(joinGameRequest.Password) {
-				if !game.IsRunning() {
-					// Start game - OK
-					session.AddGameToPool(user.Id, joinGameRequest.DisplayName, game)
-					c.Redirect(http.StatusFound, "/game/session/"+game.Id)
-					return
-				} else {
-					if !session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
-						notifications = append(notifications,
-							models.NewNotification(models.Error, "Another user has already joined this game as Lead!"))
-					} else {
-						// Join running game - OK
-						c.Redirect(http.StatusFound, "/game/session/"+game.Id)
-						return
-					}
-				}
-			} else if game.AuthenticateAsClient(joinGameRequest.Password) {
-				if !game.IsRunning() {
-					notifications = append(notifications,
-						models.NewNotification(models.Error, "Game is not running, not allowed to start game if not lead!"))
-				} else {
-					if session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
-						notifications = append(notifications,
-							models.NewNotification(models.Error, "User is already linked to game as Lead; using client password is blocked"))
-					} else {
-						// Join running game - OK
-						if !session.AddUserIdAndNameToAccessGame(user.Id, joinGameRequest.DisplayName, game.GetId()) {
-							notifications = append(notifications,
-								models.NewNotification(models.Error, "Failed to add you to the game allow list, please retry"))
-						} else {
-							c.Redirect(http.StatusFound, "/game/session/"+game.Id)
-							return
-						}
-					}
-				}
-			} else {
-				notifications = append(notifications, models.NewNotification(models.Error, "No valid credentials"))
-			}
+			//if game.AuthenticateAsLead(joinGameRequest.Password) {
+			//	if !game.IsRunning() {
+			//		// Start game - OK
+			//		session.AddGameToPool(user.Id, joinGameRequest.DisplayName, game)
+			//		c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+			//		return
+			//	} else {
+			//		if !session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
+			//			notifications = append(notifications,
+			//				models.NewNotification(models.Error, "Another user has already joined this game as Lead!"))
+			//		} else {
+			//			// Join running game - OK
+			//			c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+			//			return
+			//		}
+			//	}
+			//} else if game.AuthenticateAsClient(joinGameRequest.Password) {
+			//	if !game.IsRunning() {
+			//		notifications = append(notifications,
+			//			models.NewNotification(models.Error, "Game is not running, not allowed to start game if not lead!"))
+			//	} else {
+			//		if session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
+			//			notifications = append(notifications,
+			//				models.NewNotification(models.Error, "User is already linked to game as Lead; using client password is blocked"))
+			//		} else {
+			//			// Join running game - OK
+			//			if !session.AddUserIdAndNameToAccessGame(user.Id, joinGameRequest.DisplayName, game.GetId()) {
+			//				notifications = append(notifications,
+			//					models.NewNotification(models.Error, "Failed to add you to the game allow list, please retry"))
+			//			} else {
+			//				c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+			//				return
+			//			}
+			//		}
+			//	}
+			//} else {
+			//	notifications = append(notifications, models.NewNotification(models.Error, "No valid credentials"))
+			//}
 		}
 
 		// FAILURE

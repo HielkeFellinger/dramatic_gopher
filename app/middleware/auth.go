@@ -36,6 +36,7 @@ func EnsureUserIsLoggedIn(c *gin.Context) {
 		return
 	}
 
+	c.Set("user", authUser)
 	c.Next()
 }
 
@@ -69,6 +70,7 @@ func ensureSessionCookieAndGetUpToDateUser(c *gin.Context) models.User {
 	// Return data
 	return models.User{
 		Id:          sessionContent.ID,
+		Role:        sessionContent.Role,
 		DisplayName: sessionContent.DisplayName,
 	}
 }

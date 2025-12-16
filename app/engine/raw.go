@@ -4,7 +4,6 @@ import "encoding/json"
 
 type RawSaveFile struct {
 	Version    string      `json:"version"`
-	Crypto     GameCrypto  `json:"crypto"`
 	Items      []RawEntity `json:"items"`
 	Characters []RawEntity `json:"characters"`
 	Maps       []RawEntity `json:"maps"`

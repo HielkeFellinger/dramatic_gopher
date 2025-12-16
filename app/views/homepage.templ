@@ -15,17 +15,23 @@ templ Homepage(user models.User) {
                     <section class="mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg">
                         if (user.Id != "") {
                         <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center">
-                            Start a new game!
+                            Have a nice game!
                         </h4>
+                        if (user.Role == "admin") {
                         <button onclick="window.location = '/game/new';"
                                 class="mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer
                                     hover:bg-blue-800 focus:ring-2 focus:ring-blue-300">
                             <b>CREATE NEW GAME</b>
                         </button>
+                        }
                         <button onclick="window.location = '/game/load';"
                                 class="mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer
                                     hover:bg-blue-800 focus:ring-2 focus:ring-blue-300">
+                            if (user.Role != "admin") {
+                            <b>JOIN A GAME</b>
+                            } else {
                             <b>LOAD A GAME</b>
+                            }
                         </button>
                         <br>
                         } else {
@@ -36,6 +42,11 @@ templ Homepage(user models.User) {
                                 class="mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer
                                     hover:bg-blue-800 focus:ring-2 focus:ring-blue-300">
                             <b>LOGIN</b>
+                        </button>
+                        <button onclick="window.location = '/user/register';"
+                                class="mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer
+                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300">
+                            <b>REGISTER</b>
                         </button>
                         }
                     </section>

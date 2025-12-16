@@ -8,7 +8,6 @@ import (
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 	"github.com/HielkeFellinger/dramatic_gopher/app/ecs"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type Game interface {
@@ -19,24 +18,15 @@ type Game interface {
 	IsRunning() bool
 	Init() error
 	Validate() (string, error)
-	AuthenticateAsLead(password string) bool
-	AuthenticateAsClient(password string) bool
-}
-
-type GameCrypto struct {
-	LeadPassword   string `json:"leadPassword"`
-	ClientPassword string `json:"clientPassword"`
-	Description    string `json:"description"`
 }
 
 type BaseGame struct {
 	Id          string
-	Title       string     `json:"title"`
-	Version     string     `json:"-"` // Sourced form SafeFile
-	Crypto      GameCrypto `json:"crypto"`
-	Description string     `json:"description"`
-	ImageUrl    string     `json:"imageUrl"`
-	SaveFile    string     `json:"saveFile"`
+	Title       string `json:"title"`
+	Version     string `json:"-"` // Sourced form SafeFile
+	Description string `json:"description"`
+	ImageUrl    string `json:"imageUrl"`
+	SaveFile    string `json:"saveFile"`
 	Running     bool
 	World       *ecs.World // Sourced form SafeFile
 }
@@ -87,14 +77,4 @@ func (bg *BaseGame) GetImageUrl() string {
 
 func (bg *BaseGame) IsRunning() bool {
 	return bg.Running
-}
-
-func (bg *BaseGame) AuthenticateAsClient(password string) bool {
-	errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.ClientPassword), []byte(password))
-	return errBcrypt == nil
-}
-
-func (bg *BaseGame) AuthenticateAsLead(password string) bool {
-	errBcrypt := bcrypt.CompareHashAndPassword([]byte(bg.Crypto.LeadPassword), []byte(password))
-	return errBcrypt == nil
 }
