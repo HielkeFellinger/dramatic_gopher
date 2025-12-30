@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"strconv"
 )
 
 var CurrentConfig *Config
@@ -16,6 +17,7 @@ type Config struct {
 	DatabaseFilePath     string
 	DefaultAdminPassword string
 	DefaultGamePassword  string
+	PasswordMinLength    int
 }
 
 func InitConfig() *Config {
@@ -46,6 +48,11 @@ func InitConfig() *Config {
 	if len(configInit.Port) == 0 {
 		log.Panic("CONFIG: Invalid or missing Port (env.PORT)")
 	}
+	value, convErr := strconv.Atoi(os.Getenv("PASSWORD_MIN_LENGTH"))
+	if convErr != nil && value > 0 {
+		log.Panic("CONFIG: Invalid (Should be > 0) or missing (env.PASSWORD_MIN_LENGTH)")
+	}
+	configInit.PasswordMinLength = value
 
 	_, readError := os.ReadDir(configInit.CampaignSavesDir)
 	if readError != nil {

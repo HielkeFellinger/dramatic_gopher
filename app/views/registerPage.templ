@@ -20,11 +20,11 @@ templ RegisterPage(user models.User, notifications []models.Notification) {
                                    placeholder="Username" value={user.Name} required />
                             <label for="displayName" class="text-gray-200 ml-1">Your Display Name: </label>
                             <input type="text" id="displayName" name="displayName" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
-                                   placeholder="Your Default Display Name" value={user.Name} required />
+                                   placeholder="Your Default Display Name" value={user.DisplayName} required />
                             <label for="password" class="text-gray-200 ml-1">Password: </label>
                             <input type="password" id="password" name="password" class="w-full border rounded-lg p-2 mt-2 mb-4 bg-white"
                                 placeholder="Password" required/>
-                            <label for="passwordCheck" class="text-gray-200 ml-1">Password: </label>
+                            <label for="passwordCheck" class="text-gray-200 ml-1">Confirm Password: </label>
                             <input type="password" id="passwordCheck" name="passwordCheck" class="w-full border rounded-lg p-2 mt-2 mb-4 bg-white"
                                    placeholder="Confirm Password" required/>
                             <div class="flex flex-row items-center justify-between">
@@ -48,7 +48,8 @@ templ RegisterPage(user models.User, notifications []models.Notification) {
     <script>
         function loadSpinner() {
             if (document.getElementById("username").value.trim() !== '' &&
-                document.getElementById("password").value.trim() !== '') {
+            if (document.getElementById("password").value.trim() !== '' &&
+                document.getElementById("password").value.trim() !== document.getElementById("passwordCheck").value.trim())) {
                 document.getElementById("spinner").style.display = "block";
             }
         }

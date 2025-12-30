@@ -60,15 +60,15 @@ func RegisterPage(user models.User, notifications []models.Notification) templ.C
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(user.Name)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(user.DisplayName)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerPage.templ`, Line: 23, Col: 91}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerPage.templ`, Line: 23, Col: 98}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Password\" required> <label for=\"passwordCheck\" class=\"text-gray-200 ml-1\">Password: </label> <input type=\"password\" id=\"passwordCheck\" name=\"passwordCheck\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Confirm Password\" required><div class=\"flex flex-row items-center justify-between\"><div class=\"w-full\"><button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                            hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\" onclick=\"loadSpinner()\"><b>REGISTER</b></button></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Password\" required> <label for=\"passwordCheck\" class=\"text-gray-200 ml-1\">Confirm Password: </label> <input type=\"password\" id=\"passwordCheck\" name=\"passwordCheck\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Confirm Password\" required><div class=\"flex flex-row items-center justify-between\"><div class=\"w-full\"><button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                            hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\" onclick=\"loadSpinner()\"><b>REGISTER</b></button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -94,7 +94,7 @@ func RegisterPage(user models.User, notifications []models.Notification) templ.C
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</html><script>\n        function loadSpinner() {\n            if (document.getElementById(\"username\").value.trim() !== '' &&\n                document.getElementById(\"password\").value.trim() !== '') {\n                document.getElementById(\"spinner\").style.display = \"block\";\n            }\n        }\n        function hideSpinner() {\n            document.getElementById(\"spinner\").style.display = \"none\";\n        }\n\n        window.addEventListener(\"pageshow\", hideSpinner);\n        window.addEventListener(\"popstate\", hideSpinner);\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</html><script>\n        function loadSpinner() {\n            if (document.getElementById(\"username\").value.trim() !== '' &&\n            if (document.getElementById(\"password\").value.trim() !== '' &&\n                document.getElementById(\"password\").value.trim() !== document.getElementById(\"passwordCheck\").value.trim())) {\n                document.getElementById(\"spinner\").style.display = \"block\";\n            }\n        }\n        function hideSpinner() {\n            document.getElementById(\"spinner\").style.display = \"none\";\n        }\n\n        window.addEventListener(\"pageshow\", hideSpinner);\n        window.addEventListener(\"popstate\", hideSpinner);\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

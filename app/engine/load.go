@@ -27,7 +27,6 @@ func FindAvailableGames() []*BaseGame {
 			}
 		}
 	}
-
 	return possibleGames
 }
 
@@ -54,7 +53,7 @@ func LoadGameById(id string) (*BaseGame, error) {
 					return nil, fmt.Errorf("error parsing campaign 'game_info.json' File: '%s'", gameUnmarshallErr.Error())
 				}
 
-				// Validate if all files are reachable!
+				// OK - Validate if all files are reachable!
 				potentialGame.Id = id
 				return &potentialGame, nil
 			}

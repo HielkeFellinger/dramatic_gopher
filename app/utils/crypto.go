@@ -17,7 +17,6 @@ func HashPassword(password string) ([]byte, error) {
 func getCryptoCost() int {
 	// Get env settings
 	envCost := config.CurrentConfig.CryptCost
-
 	envIntCost, err := strconv.ParseInt(envCost, 10, 8)
 	if err != nil || int(envIntCost) < minCryptoCost {
 		return minCryptoCost

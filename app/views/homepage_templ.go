@@ -72,7 +72,7 @@ func Homepage(user models.User) templ.Component {
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</button><br>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</button><br><br><button onclick=\"window.location = '/user/logout';\" class=\"mt-2 py-1 px-4 w-full h-10 rounded-lg text-white bg-blue-500 cursor-pointer\n                                    hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\"><b>LOGOUT</b></button><br>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

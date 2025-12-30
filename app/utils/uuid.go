@@ -3,12 +3,9 @@ package utils
 import "github.com/google/uuid"
 
 func ParseStringToUuid(uuidAsString string) (uuid.UUID, error) {
-	var returnUuid uuid.UUID
-	if parsedUuid, err := uuid.Parse(uuidAsString); err == nil {
-		returnUuid = parsedUuid
-	} else {
-		return uuid.UUID{}, err
+	parsedUuid, err := uuid.Parse(uuidAsString)
+	if err == nil {
+		return parsedUuid, err
 	}
-
-	return returnUuid, nil
+	return uuid.UUID{}, err
 }

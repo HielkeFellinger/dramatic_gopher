@@ -46,7 +46,6 @@ func SetSessionJWTCookie(content SessionCookieContent, c *gin.Context) error {
 		c.SetSameSite(http.SameSiteLaxMode)
 		c.SetCookie(SessionCookieName, tokenString, 3600*24, "", "", false, false)
 	}
-
 	return err
 }
 

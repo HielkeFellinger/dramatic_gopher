@@ -21,7 +21,9 @@ func HandlePageRoutes(router *gin.Engine) {
 	// Users
 	router.GET("/user/login", middleware.EnsureUserValuesIsSet, pages.LoadLoginPage())
 	router.POST("/user/login", middleware.EnsureUserValuesIsSet, pages.HandleLoginPage())
+	router.GET("/user/logout", middleware.EnsureUserValuesIsSet, pages.HandleLogoutPage())
 	router.GET("/user/register", middleware.EnsureUserValuesIsSet, pages.LoadRegisterPage())
+	router.POST("/user/register", middleware.EnsureUserValuesIsSet, pages.HandleRegisterPage())
 
 	// Session
 	router.GET("/session/:game_id/ws", middleware.EnsureUserValueIsSetAndAllowedToAccessGame, session.HandleWebsocket)
