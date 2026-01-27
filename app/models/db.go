@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"strconv"
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/utils"
 )
@@ -57,7 +58,7 @@ func (cs *campaignService) GetCampaignsByUserId(userId int64) ([]Campaign, error
 
 	for rows.Next() {
 		campaign := Campaign{}
-		if rowErr := rows.Scan(&campaign.Id, &campaign.Name, &campaign.State, &campaign.Password); rowErr != nil {
+		if rowErr := rows.Scan(&campaign.Id, &campaign.Name, &campaign.Description, &campaign.State, &campaign.Password); rowErr != nil {
 			return campaigns, rowErr
 		}
 		campaigns = append(campaigns, campaign)
@@ -72,7 +73,25 @@ func (cs *campaignService) InsertCampaign(campaign Campaign) (Campaign, error) {
 	}
 
 	returnCampaign := Campaign{}
-	sqlInsertCampaign := `INSERT INTO campaigns (name, password) VALUES (?, ?) RETURNING *;`
-	row := DB.QueryRow(sqlInsertCampaign, campaign.Name, string(encryptPass))
+	sqlInsertCampaign := `INSERT INTO campaigns (name, description, state, password) VALUES (?, ?, ?, ?) RETURNING *;`
+	row := DB.QueryRow(sqlInsertCampaign, campaign.Name, campaign.Description, campaign.State, string(encryptPass))
 	return returnCampaign, row.Scan(&returnCampaign.Id, &returnCampaign.Name, &returnCampaign.State, &returnCampaign.Password)
+}
+
+func (cs *campaignService) LoadCampaignOfDataDir(dataDir string) (Campaign, error) {
+	// Load Match
+	returnCampaignToDataDir := CampaignToData{}
+	sqlGetCampaignOfDataDir := `SELECT * FROM campaign_to_data WHERE data_dir = ?;`
+	row := DB.QueryRow(sqlGetCampaignOfDataDir, dataDir)
+	loadErr := row.Scan(&returnCampaignToDataDir.Id, returnCampaignToDataDir.CampaignId, returnCampaignToDataDir.DataDir)
+	if loadErr != nil {
+		return Campaign{}, loadErr
+	}
+
+	// Load Campaign
+	campaignId, convErr := strconv.Atoi(returnCampaignToDataDir.CampaignId)
+	if convErr != nil {
+		return Campaign{}, convErr
+	}
+	return cs.GetCampaignById(int64(campaignId))
 }

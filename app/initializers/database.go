@@ -48,6 +48,7 @@ func loadDefaultTables(db *sql.DB) {
     CREATE TABLE IF NOT EXISTS campaigns (
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE,
+        description TEXT,
         state TEXT,
 	    password TEXT NOT NULL
     );
@@ -72,6 +73,19 @@ func loadDefaultTables(db *sql.DB) {
 		log.Fatal(err)
 	}
 	log.Println("	Table 'campaign_access' is loaded successfully")
+
+	sqlCampaignToDataStmt := `
+	CREATE TABLE IF NOT EXISTS campaign_to_data (
+	    id INTEGER PRIMARY KEY,
+	    campaign_id INTEGER NOT NULL UNIQUE,
+	    data_dir TEXT NOT NULL UNIQUE,
+	    FOREIGN KEY(campaign_id) REFERENCES campaigns(id) ON DELETE CASCADE ON UPDATE CASCADE
+	)
+	`
+	if _, err := db.Exec(sqlCampaignToDataStmt); err != nil {
+		log.Fatal(err)
+	}
+	log.Println("	Table 'campaign_to_data' is loaded successfully")
 }
 
 func loadDefaultContent(db *sql.DB) {
