@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/engine"
@@ -19,7 +20,14 @@ func LoadGamePage() gin.HandlerFunc {
 		baseGames := engine.FindAvailableGames()
 		games := make([]engine.Game, len(baseGames))
 		for index, game := range baseGames {
-			game.Running = session.IsGameRunning(game.Id)
+			// Check if game is registered
+			if campaign, err := models.CampaignService.LoadCampaignOfDataDir(game.DataDir); err == nil {
+				log.Println(campaign)
+				game.Id = campaign.Id
+				game.Running = session.IsGameRunning(game.Id)
+			} else {
+				log.Printf("Game save dir '%s' could not be loaded from the database", game.DataDir)
+			}
 			games[index] = game
 		}
 
@@ -155,6 +163,6 @@ func retrieveGame(gameId string) (*engine.BaseGame, error) {
 	}
 
 	// Attempt to load form file
-	game, loadErr := engine.LoadGameById(gameId)
+	game, loadErr := engine.LoadGameByDirectoryName(gameId)
 	return game, loadErr
 }

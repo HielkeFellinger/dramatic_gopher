@@ -11,10 +11,12 @@ import (
 )
 
 type Game interface {
+	HasId() bool
 	GetId() string
 	GetTitle() string
 	GetDescription() string
 	GetImageUrl() string
+	GetDataDir() string
 	IsRunning() bool
 	Init() error
 	Validate() (string, error)
@@ -27,6 +29,7 @@ type BaseGame struct {
 	Description string `json:"description"`
 	ImageUrl    string `json:"imageUrl"`
 	SaveFile    string `json:"saveFile"`
+	DataDir     string `json:"-"`
 	Running     bool
 	World       *ecs.World // Sourced form SafeFile
 }
@@ -59,6 +62,10 @@ func (bg *BaseGame) Validate() (string, error) {
 	}
 }
 
+func (bg *BaseGame) HasId() bool {
+	return bg.Id != ""
+}
+
 func (bg *BaseGame) GetId() string {
 	return bg.Id
 }
@@ -73,6 +80,10 @@ func (bg *BaseGame) GetDescription() string {
 
 func (bg *BaseGame) GetImageUrl() string {
 	return bg.ImageUrl
+}
+
+func (bg *BaseGame) GetDataDir() string {
+	return bg.DataDir
 }
 
 func (bg *BaseGame) IsRunning() bool {

@@ -14,25 +14,28 @@ func FindAvailableGames() []*BaseGame {
 	possibleGames := make([]*BaseGame, 0)
 	campaignSaveDir := config.CurrentConfig.CampaignSavesDir
 
+	log.Printf("Reading Campaign data dir: '%s'", campaignSaveDir)
 	entries, readErr := os.ReadDir(campaignSaveDir)
 	if readErr != nil {
-		log.Println("Could not read campaign saves dir: ", readErr)
+		log.Println("Could not read campaign data dir: ", readErr)
 	}
 	for _, entry := range entries {
 		if entry.IsDir() {
-			if possibleGame, loadErr := LoadGameById(entry.Name()); loadErr == nil {
+			if possibleGame, loadErr := LoadGameByDirectoryName(entry.Name()); loadErr == nil {
 				possibleGames = append(possibleGames, possibleGame)
 			} else {
-				log.Println("Could not read potential campaign dir: ", loadErr)
+				log.Printf("Could not read potential campaign save dir: '%s'", loadErr)
 			}
 		}
 	}
 	return possibleGames
 }
 
-func LoadGameById(id string) (*BaseGame, error) {
+func LoadGameByDirectoryName(dirName string) (*BaseGame, error) {
 	campaignSaveDir := config.CurrentConfig.CampaignSavesDir
-	currentCampaignPath := filepath.Join(campaignSaveDir, id)
+	currentCampaignPath := filepath.Join(campaignSaveDir, dirName)
+
+	log.Printf("Attempting to read Campaign save dir: '%s'", currentCampaignPath)
 	if campaignFiles, campaignReadError := os.ReadDir(currentCampaignPath); campaignReadError == nil {
 		for _, campaignEntry := range campaignFiles {
 			if campaignEntry.IsDir() {
@@ -48,18 +51,18 @@ func LoadGameById(id string) (*BaseGame, error) {
 				}
 
 				var potentialGame BaseGame
-				log.Println(string(gameInfoData))
 				if gameUnmarshallErr := json.Unmarshal(gameInfoData, &potentialGame); gameUnmarshallErr != nil {
 					return nil, fmt.Errorf("error parsing campaign 'game_info.json' File: '%s'", gameUnmarshallErr.Error())
 				}
 
 				// OK - Validate if all files are reachable!
-				potentialGame.Id = id
+				log.Printf("Successful in reading Campaign save dir: '%s'", currentCampaignPath)
+				potentialGame.DataDir = dirName
 				return &potentialGame, nil
 			}
 		}
 	} else {
-		return nil, fmt.Errorf("could not read campaign saves dir: %s", campaignReadError.Error())
+		return nil, fmt.Errorf("could not read Campaign save dir: %s", campaignReadError.Error())
 	}
-	return nil, fmt.Errorf("could not load campaign by id: '%s', no match found", id)
+	return nil, fmt.Errorf("could not load campaign by dirName: '%s', no 'game_info.json' match found", dirName)
 }
