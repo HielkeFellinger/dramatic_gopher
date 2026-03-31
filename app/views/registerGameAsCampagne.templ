@@ -1,0 +1,69 @@
+package views
+
+import (
+    "github.com/HielkeFellinger/dramatic_gopher/app/views/components"
+    "github.com/HielkeFellinger/dramatic_gopher/app/models"
+)
+
+templ RegisterGameDirAsCampaign(campaign models.Campaign, campaignDir string, notifications []models.Notification) {
+    <!DOCTYPE html>
+    <html lang="en">
+    @components.Header()
+    <body class="bg-gray-800">
+    <main class="min-h-screen w-full">
+        <div class="mt-6 w-full flex justify-center items-center flex-col">
+            <section class="mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg">
+                <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center mb-2">Register Save Dir as a new Campaign</h4>
+                <form method="post" action="/game/register/">
+                    <label for="game_dir" class="text-gray-200 ml-1">Game Directory: </label>
+                    <input type="text" id="game_dir" name="game_dir" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
+                           placeholder="" value={campaignDir} readonly />
+                    <label for="displayName" class="text-gray-200 ml-1">Campaign Name: </label>
+                    <input type="text" id="displayName" name="displayName" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
+                           placeholder="Your Campaign Name" value={campaign.Name} required />
+                    <label for="displayDescription" class="text-gray-200 ml-1">Campaign Description: </label>
+                    <input type="text" id="displayDescription" name="displayDescription" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
+                           placeholder="Your Campaign Description" value={campaign.Description} required />
+
+                    <label for="password" class="text-gray-200 ml-1">Campaign Password: </label>
+                    <input type="password" id="password" name="password" class="w-full border rounded-lg p-2 mt-2 mb-4 bg-white"
+                           placeholder="Password" required/>
+                    <label for="passwordCheck" class="text-gray-200 ml-1">Confirm Password: </label>
+                    <input type="password" id="passwordCheck" name="passwordCheck" class="w-full border rounded-lg p-2 mt-2 mb-4 bg-white"
+                           placeholder="Confirm Password" required/>
+                    <div class="flex flex-row items-center justify-between">
+                        <div class="w-full">
+                            <button class="mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer
+                                                hover:bg-blue-800 focus:ring-2 focus:ring-blue-300"
+                                    onclick="loadSpinner()"><b>REGISTER</b></button>
+                        </div>
+                        @components.SpinnerConstruct("spinner")
+                    </div>
+                </form>
+            </section>
+            if len(notifications) > 0 {
+                @components.Notifications(notifications)
+            }
+        </div>
+    </main>
+    </body>
+    @components.Footer("Game on")
+    </html>
+    <script>
+        function loadSpinner() {
+            if (document.getElementById("displayName").value.trim() !== '' &&
+                document.getElementById("displayDescription").value.trim() !== '' &&
+                document.getElementById("password").value.trim() !== '' &&
+                document.getElementById("password").value.trim() === document.getElementById("passwordCheck").value.trim()) {
+                document.getElementById("spinner").style.display = "block";
+            }
+        }
+        function hideSpinner() {
+            document.getElementById("spinner").style.display = "none";
+        }
+
+        window.addEventListener("pageshow", hideSpinner);
+        window.addEventListener("popstate", hideSpinner);
+    </script>
+}
+

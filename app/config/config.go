@@ -11,6 +11,7 @@ var CurrentConfig *Config
 type Config struct {
 	CryptCost            string
 	JwtSecret            string
+	SessionSecret        string
 	Host                 string
 	Port                 string
 	CampaignSavesDir     string
@@ -31,6 +32,7 @@ func InitConfig() *Config {
 	// Required
 	configInit.Port = os.Getenv("PORT")
 	configInit.JwtSecret = os.Getenv("JWT_SECRET")
+	configInit.SessionSecret = os.Getenv("SESSION_SECRET")
 	configInit.CampaignSavesDir = os.Getenv("CAMPAIGN_SAVES_DIR")
 	configInit.DatabaseFilePath = os.Getenv("DATABASE_FILE_PATH")
 	configInit.DefaultAdminPassword = os.Getenv("DEFAULT_ADMIN_PASSWORD")
@@ -44,6 +46,9 @@ func InitConfig() *Config {
 	}
 	if len(configInit.JwtSecret) < 8 {
 		log.Panic("CONFIG: Invalid (to small <8 chars) or empty JWT secret (env.JWT_SECRET)")
+	}
+	if len(configInit.SessionSecret) < 8 {
+		log.Panic("CONFIG: Invalid (to small <8 chars) or empty Session Secret (env.SESSION_SECRET)")
 	}
 	if len(configInit.Port) == 0 {
 		log.Panic("CONFIG: Invalid or missing Port (env.PORT)")

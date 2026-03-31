@@ -1,6 +1,7 @@
 package pages
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -47,7 +48,7 @@ func LoadJoinGamePage() gin.HandlerFunc {
 		game, loadErr := retrieveGame(gameId)
 		if loadErr != nil {
 			notifications = append(notifications, models.NewNotification(models.Error, "404 - Game does not exist"))
-			c.Set("notification", notifications)
+			saveNotifications(c, notifications)
 			c.Redirect(http.StatusFound, "/game/load")
 			return
 		}
@@ -68,7 +69,7 @@ func HandleJoinGame() gin.HandlerFunc {
 		game, loadErr := retrieveGame(gameId)
 		if loadErr != nil {
 			notifications = append(notifications, models.NewNotification(models.Error, "404 - Game does not exist"))
-			c.Set("notification", notifications)
+			saveNotifications(c, notifications)
 			c.Redirect(http.StatusFound, "/game/load")
 			return
 		}
@@ -143,12 +144,50 @@ func LoadGameSessionPage() gin.HandlerFunc {
 		game, loadErr := retrieveGame(gameId)
 		if loadErr != nil {
 			notifications = append(notifications, models.NewNotification(models.Error, "404 - Game does not exist"))
-			c.Set("notification", notifications)
+			saveNotifications(c, notifications)
 			c.Redirect(http.StatusFound, "/game/load")
 			return
 		}
 
 		if err := render(c, http.StatusOK, views.Session(user, game)); err != nil {
+			return
+		}
+	}
+}
+
+func RegisterGameData() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		_ = c.MustGet("user").(models.User)
+		dataDir := c.Param("data_dir")
+		notifications := getNotifications(c)
+
+		// Test if a match already exists and is locked to an account
+		if campaign, err := models.CampaignService.LoadCampaignOfDataDir(dataDir); err == nil {
+			notifications = append(notifications, models.NewNotification(models.Warning,
+				fmt.Sprintf("201 - Game Dir is already linked to campaign: '%s'.", campaign.Name)))
+			saveNotifications(c, notifications)
+			c.Redirect(http.StatusFound, "/game/load")
+		}
+
+		// Check if dir is available as a game
+		baseGames := engine.FindAvailableGames()
+		var match *engine.BaseGame
+		for _, game := range baseGames {
+			if game.DataDir == dataDir {
+				match = game
+			}
+		}
+		if match == nil {
+			notifications = append(notifications, models.NewNotification(models.Error,
+				"404 - Game Dir does not exist or is not a valid game!"))
+			saveNotifications(c, notifications)
+			c.Redirect(http.StatusFound, "/game/load")
+			return
+		}
+
+		// Allow to be converted
+		rawCampaign := models.Campaign{Name: match.Title, Description: match.Description}
+		if err := render(c, http.StatusOK, views.RegisterGameDirAsCampaign(rawCampaign, dataDir, notifications)); err != nil {
 			return
 		}
 	}

@@ -33,5 +33,6 @@ func loadGinEngine() {
 	engine = gin.Default()
 	// Load Routes and (static) content
 	log.Println("MAIN: Loading (Static) Content, Templates and Routes")
+	routes.HandleNotificationSessionStore(engine)
 	routes.HandlePageRoutes(engine)
 }

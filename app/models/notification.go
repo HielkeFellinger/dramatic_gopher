@@ -11,9 +11,9 @@ const (
 )
 
 type Notification struct {
-	Id      string
-	Type    NotificationType
-	Content string
+	Id      string           `json:"id"`
+	Type    NotificationType `json:"type"`
+	Content string           `json:"content"`
 }
 
 func NewNotification(NotificationType NotificationType, content string) Notification {
