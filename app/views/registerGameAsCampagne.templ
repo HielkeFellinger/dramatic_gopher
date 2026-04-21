@@ -14,7 +14,7 @@ templ RegisterGameDirAsCampaign(campaign models.Campaign, campaignDir string, no
         <div class="mt-6 w-full flex justify-center items-center flex-col">
             <section class="mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg">
                 <h4 class="text-base lg:text-lg text-gray-200 font-medium text-center mb-2">Register Save Dir as a new Campaign</h4>
-                <form method="post" action="/game/register/">
+                <form method="post" action={"/game/register/" + campaignDir}>
                     <label for="game_dir" class="text-gray-200 ml-1">Game Directory: </label>
                     <input type="text" id="game_dir" name="game_dir" class="w-full border rounded-lg p-2 mt-2 mb-2 bg-white"
                            placeholder="" value={campaignDir} readonly />

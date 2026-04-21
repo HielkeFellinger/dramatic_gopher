@@ -19,8 +19,8 @@ func CheckIfPasswordMeetsPolicy(password string, mustNotEqual string) bool {
 	return true
 }
 
-func CheckIfNameMeetsPolicy(username string) bool {
-	nameTrimmed := strings.TrimSpace(username)
+func CheckIfNameMeetsPolicy(name string) bool {
+	nameTrimmed := strings.TrimSpace(name)
 
 	if len(nameTrimmed) < 4 {
 		return false

@@ -1,6 +1,10 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type NotificationType string
 
@@ -21,5 +25,13 @@ func NewNotification(NotificationType NotificationType, content string) Notifica
 		Id:      uuid.NewString(),
 		Type:    NotificationType,
 		Content: content,
+	}
+}
+
+func NewNotificationFromError(NotificationType NotificationType, content string, err error) Notification {
+	return Notification{
+		Id:      uuid.NewString(),
+		Type:    NotificationType,
+		Content: fmt.Sprintf("%s: '%s'", content, err.Error()),
 	}
 }

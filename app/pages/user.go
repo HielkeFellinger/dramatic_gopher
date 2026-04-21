@@ -134,7 +134,7 @@ func HandleRegisterPage() gin.HandlerFunc {
 			notifications = append(notifications, models.NewNotification(models.Error, "DisplayName does not meet policy"))
 		}
 		if registerRequest.Password != registerRequest.PasswordCheck {
-			notifications = append(notifications, models.NewNotification(models.Error, "Password does not match"))
+			notifications = append(notifications, models.NewNotification(models.Error, "Passwords do not match"))
 		}
 		if !utils.CheckIfPasswordMeetsPolicy(registerRequest.Password, registerRequest.Username) {
 			notifications = append(notifications, models.NewNotification(models.Error, "Password does not meet policy"))

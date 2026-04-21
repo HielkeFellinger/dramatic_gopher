@@ -25,8 +25,8 @@ func HandlePageRoutes(router *gin.Engine) {
 	router.GET("/game/join/:game_id", middleware.EnsureUserIsLoggedIn, pages.LoadJoinGamePage())
 	router.POST("/game/join/:game_id", middleware.EnsureUserIsLoggedIn, pages.HandleJoinGame())
 	router.GET("/game/session/:game_id", middleware.EnsureUserValueIsSetAndAllowedToAccessGame, pages.LoadGameSessionPage())
-	router.POST("/game/register/:data_dir", middleware.EnsureUserHasAdminRole, pages.HandleJoinGame())
-	router.GET("/game/register/:data_dir", middleware.EnsureUserHasAdminRole, pages.RegisterGameData())
+	router.POST("/game/register/:data_dir", middleware.EnsureUserHasAdminRole, pages.HandleRegisterGameData())
+	router.GET("/game/register/:data_dir", middleware.EnsureUserHasAdminRole, pages.LoadRegisterGameDataPage())
 
 	// Users
 	router.GET("/user/login", middleware.EnsureUserValuesIsSet, pages.LoadLoginPage())

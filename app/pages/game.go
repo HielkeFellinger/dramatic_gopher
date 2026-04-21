@@ -8,6 +8,7 @@ import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/engine"
 	"github.com/HielkeFellinger/dramatic_gopher/app/models"
 	"github.com/HielkeFellinger/dramatic_gopher/app/session"
+	"github.com/HielkeFellinger/dramatic_gopher/app/utils"
 	"github.com/HielkeFellinger/dramatic_gopher/app/views"
 	"github.com/gin-gonic/gin"
 )
@@ -23,10 +24,10 @@ func LoadGamePage() gin.HandlerFunc {
 		for index, game := range baseGames {
 			// Check if game is registered
 			if campaign, err := models.CampaignService.LoadCampaignOfDataDir(game.DataDir); err == nil {
-				log.Println(campaign)
 				game.Id = campaign.Id
 				game.Running = session.IsGameRunning(game.Id)
 			} else {
+				log.Printf("Error loading game from data dir: %v", err)
 				log.Printf("Game save dir '%s' could not be loaded from the database", game.DataDir)
 			}
 			games[index] = game
@@ -86,6 +87,7 @@ func HandleJoinGame() gin.HandlerFunc {
 		}
 
 		if len(notifications) == 0 {
+			// @TODO: Rewire for new auth.
 			// Attempt to authenticate
 			//if game.AuthenticateAsLead(joinGameRequest.Password) {
 			//	if !game.IsRunning() {
@@ -155,7 +157,7 @@ func LoadGameSessionPage() gin.HandlerFunc {
 	}
 }
 
-func RegisterGameData() gin.HandlerFunc {
+func LoadRegisterGameDataPage() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_ = c.MustGet("user").(models.User)
 		dataDir := c.Param("data_dir")
@@ -167,16 +169,11 @@ func RegisterGameData() gin.HandlerFunc {
 				fmt.Sprintf("201 - Game Dir is already linked to campaign: '%s'.", campaign.Name)))
 			saveNotifications(c, notifications)
 			c.Redirect(http.StatusFound, "/game/load")
+			return
 		}
 
 		// Check if dir is available as a game
-		baseGames := engine.FindAvailableGames()
-		var match *engine.BaseGame
-		for _, game := range baseGames {
-			if game.DataDir == dataDir {
-				match = game
-			}
-		}
+		match := findMatchingBaseGameByDir(dataDir)
 		if match == nil {
 			notifications = append(notifications, models.NewNotification(models.Error,
 				"404 - Game Dir does not exist or is not a valid game!"))
@@ -191,6 +188,119 @@ func RegisterGameData() gin.HandlerFunc {
 			return
 		}
 	}
+}
+
+func HandleRegisterGameData() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		_ = c.MustGet("user").(models.User)
+		dataDir := c.Param("data_dir")
+		notifications := getNotifications(c)
+
+		// Validate Request
+		var registerGameRequest struct {
+			GameDir            string `form:"game_dir"`
+			DisplayName        string `form:"displayName"`
+			DisplayDescription string `form:"displayDescription"`
+			Password           string `form:"password"`
+			PasswordCheck      string `form:"passwordCheck"`
+		}
+
+		// Test input and build basic Campaign data
+		bindErr := c.Bind(&registerGameRequest)
+		rawCampaign := models.Campaign{}
+		if bindErr != nil {
+			noBindErr := models.NewNotification(models.Error, "Could not parse request, please retry")
+			notifications = append(notifications, noBindErr)
+
+			if match := findMatchingBaseGameByDir(dataDir); match != nil {
+				rawCampaign.Name = match.Title
+				rawCampaign.Description = match.Description
+			}
+		} else {
+			if dataDir != registerGameRequest.GameDir {
+				notifications = append(notifications, models.NewNotification(models.Warning,
+					fmt.Sprintf("400 - Registration failed: Game Dir does not match form input")))
+				saveNotifications(c, notifications)
+				c.Redirect(http.StatusFound, "/game/load")
+				return
+			}
+			rawCampaign.Name = registerGameRequest.DisplayName
+			rawCampaign.Description = registerGameRequest.DisplayDescription
+
+			// Check Input Validity
+			if !utils.CheckIfNameMeetsPolicy(registerGameRequest.DisplayName) {
+				notifications = append(notifications, models.NewNotification(models.Error, "DisplayName does not meet policy"))
+			}
+			if registerGameRequest.Password != registerGameRequest.PasswordCheck {
+				notifications = append(notifications, models.NewNotification(models.Error, "Passwords do not match"))
+			} else {
+				rawCampaign.Password = registerGameRequest.Password
+			}
+			if !utils.CheckIfPasswordMeetsPolicy(registerGameRequest.Password, registerGameRequest.DisplayDescription) {
+				notifications = append(notifications, models.NewNotification(models.Error, "Password does not meet policy"))
+			}
+		}
+
+		// Continue if no notifications are set
+		if len(notifications) == 0 {
+			// Test if a match already exists and is locked to an account
+			if campaign, err := models.CampaignService.LoadCampaignOfDataDir(dataDir); err == nil {
+				notifications = append(notifications, models.NewNotification(models.Warning,
+					fmt.Sprintf("201 - Game Dir is already linked to campaign: '%s'.", campaign.Name)))
+				saveNotifications(c, notifications)
+				c.Redirect(http.StatusFound, "/game/load")
+				return
+			}
+
+			if match := findMatchingBaseGameByDir(dataDir); match == nil {
+				notifications = append(notifications, models.NewNotification(models.Error,
+					"404 - Game Dir does not exist or is not a valid game!"))
+				saveNotifications(c, notifications)
+				c.Redirect(http.StatusFound, "/game/load")
+				return
+			}
+
+			// TRY INSERTION
+			// - First Campaign
+			insertedCampaign, err := models.CampaignService.InsertCampaign(rawCampaign)
+			if err != nil {
+				notifications = append(notifications, models.NewNotificationFromError(models.Error, "500 - Campaign", err))
+			} else {
+				campaignData := models.CampaignToData{
+					CampaignId: insertedCampaign.Id,
+					DataDir:    dataDir,
+				}
+				// - Second CampaignToData
+				_, ctdErr := models.CampaignService.InsertCampaignToData(campaignData)
+				if ctdErr != nil {
+					notifications = append(notifications, models.NewNotificationFromError(models.Error,
+						"500  - Campaign Data", ctdErr))
+				} else {
+					// SUCCESS
+					notifications = append(notifications, models.NewNotification(models.Success,
+						fmt.Sprintf("200 - Game Dir has been converted to campaign: '%s'.", insertedCampaign.Name)))
+					saveNotifications(c, notifications)
+					c.Redirect(http.StatusFound, "/game/load")
+					return
+				}
+			}
+		}
+
+		// FAILURE
+		if err := render(c, http.StatusOK, views.RegisterGameDirAsCampaign(rawCampaign, dataDir, notifications)); err != nil {
+			return
+		}
+	}
+}
+
+func findMatchingBaseGameByDir(dataDir string) *engine.BaseGame {
+	baseGames := engine.FindAvailableGames()
+	for _, game := range baseGames {
+		if game.DataDir == dataDir {
+			return game
+		}
+	}
+	return nil
 }
 
 func retrieveGame(gameId string) (*engine.BaseGame, error) {

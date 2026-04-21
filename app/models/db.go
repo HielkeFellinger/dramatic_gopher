@@ -43,7 +43,7 @@ func (us *userService) InsertUser(user User) (User, error) {
 func (cs *campaignService) GetCampaignById(campaignId int64) (Campaign, error) {
 	campaign := Campaign{}
 	result := DB.QueryRow(`SELECT * FROM campaigns WHERE id = ?;`, campaignId)
-	return campaign, result.Scan(&campaign.Id, &campaign.Name, &campaign.State, &campaign.Password)
+	return campaign, result.Scan(&campaign.Id, &campaign.Name, &campaign.Description, &campaign.State, &campaign.Password)
 }
 
 func (cs *campaignService) GetCampaignsByUserId(userId int64) ([]Campaign, error) {
@@ -75,7 +75,16 @@ func (cs *campaignService) InsertCampaign(campaign Campaign) (Campaign, error) {
 	returnCampaign := Campaign{}
 	sqlInsertCampaign := `INSERT INTO campaigns (name, description, state, password) VALUES (?, ?, ?, ?) RETURNING *;`
 	row := DB.QueryRow(sqlInsertCampaign, campaign.Name, campaign.Description, campaign.State, string(encryptPass))
-	return returnCampaign, row.Scan(&returnCampaign.Id, &returnCampaign.Name, &returnCampaign.State, &returnCampaign.Password)
+	return returnCampaign, row.Scan(&returnCampaign.Id, &returnCampaign.Name, &returnCampaign.Description,
+		&returnCampaign.State, &returnCampaign.Password)
+}
+
+func (cs *campaignService) InsertCampaignToData(campaignToData CampaignToData) (CampaignToData, error) {
+	returnCampaignToData := CampaignToData{}
+	sqlInsertCampaignToData := `INSERT INTO campaign_to_data (campaign_id, data_dir) VALUES (?, ?) RETURNING *;`
+	row := DB.QueryRow(sqlInsertCampaignToData, campaignToData.CampaignId, campaignToData.DataDir)
+	return returnCampaignToData, row.Scan(&returnCampaignToData.Id, &returnCampaignToData.CampaignId,
+		&returnCampaignToData.DataDir)
 }
 
 func (cs *campaignService) LoadCampaignOfDataDir(dataDir string) (Campaign, error) {
@@ -83,7 +92,7 @@ func (cs *campaignService) LoadCampaignOfDataDir(dataDir string) (Campaign, erro
 	returnCampaignToDataDir := CampaignToData{}
 	sqlGetCampaignOfDataDir := `SELECT * FROM campaign_to_data WHERE data_dir = ?;`
 	row := DB.QueryRow(sqlGetCampaignOfDataDir, dataDir)
-	loadErr := row.Scan(&returnCampaignToDataDir.Id, returnCampaignToDataDir.CampaignId, returnCampaignToDataDir.DataDir)
+	loadErr := row.Scan(&returnCampaignToDataDir.Id, &returnCampaignToDataDir.CampaignId, &returnCampaignToDataDir.DataDir)
 	if loadErr != nil {
 		return Campaign{}, loadErr
 	}

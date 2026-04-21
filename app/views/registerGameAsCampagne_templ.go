@@ -42,46 +42,59 @@ func RegisterGameDirAsCampaign(campaign models.Campaign, campaignDir string, not
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><section class=\"mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg\"><h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center mb-2\">Register Save Dir as a new Campaign</h4><form method=\"post\" action=\"/game/register/\"><label for=\"game_dir\" class=\"text-gray-200 ml-1\">Game Directory: </label> <input type=\"text\" id=\"game_dir\" name=\"game_dir\" class=\"w-full border rounded-lg p-2 mt-2 mb-2 bg-white\" placeholder=\"\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<body class=\"bg-gray-800\"><main class=\"min-h-screen w-full\"><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><section class=\"mt-6 px-4 py-4 w-96 bg-gray-700 rounded-lg\"><h4 class=\"text-base lg:text-lg text-gray-200 font-medium text-center mb-2\">Register Save Dir as a new Campaign</h4><form method=\"post\" action=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(campaignDir)
+		var templ_7745c5c3_Var2 templ.SafeURL
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs("/game/register/" + campaignDir)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerGameAsCampagne.templ`, Line: 20, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerGameAsCampagne.templ`, Line: 17, Col: 75}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" readonly> <label for=\"displayName\" class=\"text-gray-200 ml-1\">Campaign Name: </label> <input type=\"text\" id=\"displayName\" name=\"displayName\" class=\"w-full border rounded-lg p-2 mt-2 mb-2 bg-white\" placeholder=\"Your Campaign Name\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\"><label for=\"game_dir\" class=\"text-gray-200 ml-1\">Game Directory: </label> <input type=\"text\" id=\"game_dir\" name=\"game_dir\" class=\"w-full border rounded-lg p-2 mt-2 mb-2 bg-white\" placeholder=\"\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(campaign.Name)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(campaignDir)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerGameAsCampagne.templ`, Line: 23, Col: 80}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerGameAsCampagne.templ`, Line: 20, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" required> <label for=\"displayDescription\" class=\"text-gray-200 ml-1\">Campaign Description: </label> <input type=\"text\" id=\"displayDescription\" name=\"displayDescription\" class=\"w-full border rounded-lg p-2 mt-2 mb-2 bg-white\" placeholder=\"Your Campaign Description\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" readonly> <label for=\"displayName\" class=\"text-gray-200 ml-1\">Campaign Name: </label> <input type=\"text\" id=\"displayName\" name=\"displayName\" class=\"w-full border rounded-lg p-2 mt-2 mb-2 bg-white\" placeholder=\"Your Campaign Name\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(campaign.Description)
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(campaign.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerGameAsCampagne.templ`, Line: 26, Col: 94}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerGameAsCampagne.templ`, Line: 23, Col: 80}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Campaign Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Password\" required> <label for=\"passwordCheck\" class=\"text-gray-200 ml-1\">Confirm Password: </label> <input type=\"password\" id=\"passwordCheck\" name=\"passwordCheck\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Confirm Password\" required><div class=\"flex flex-row items-center justify-between\"><div class=\"w-full\"><button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\" onclick=\"loadSpinner()\"><b>REGISTER</b></button></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" required> <label for=\"displayDescription\" class=\"text-gray-200 ml-1\">Campaign Description: </label> <input type=\"text\" id=\"displayDescription\" name=\"displayDescription\" class=\"w-full border rounded-lg p-2 mt-2 mb-2 bg-white\" placeholder=\"Your Campaign Description\" value=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(campaign.Description)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/registerGameAsCampagne.templ`, Line: 26, Col: 94}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\" required> <label for=\"password\" class=\"text-gray-200 ml-1\">Campaign Password: </label> <input type=\"password\" id=\"password\" name=\"password\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Password\" required> <label for=\"passwordCheck\" class=\"text-gray-200 ml-1\">Confirm Password: </label> <input type=\"password\" id=\"passwordCheck\" name=\"passwordCheck\" class=\"w-full border rounded-lg p-2 mt-2 mb-4 bg-white\" placeholder=\"Confirm Password\" required><div class=\"flex flex-row items-center justify-between\"><div class=\"w-full\"><button class=\"mt-2 w-full px-2 h-10 rounded-lg text-white bg-blue-500 cursor-pointer hover:bg-blue-800 focus:ring-2 focus:ring-blue-300\" onclick=\"loadSpinner()\"><b>REGISTER</b></button></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -89,7 +102,7 @@ func RegisterGameDirAsCampaign(campaign models.Campaign, campaignDir string, not
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></form></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></form></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -99,7 +112,7 @@ func RegisterGameDirAsCampaign(campaign models.Campaign, campaignDir string, not
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div></main></body>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</div></main></body>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -107,7 +120,7 @@ func RegisterGameDirAsCampaign(campaign models.Campaign, campaignDir string, not
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</html><script>\n        function loadSpinner() {\n            if (document.getElementById(\"displayName\").value.trim() !== '' &&\n                document.getElementById(\"displayDescription\").value.trim() !== '' &&\n                document.getElementById(\"password\").value.trim() !== '' &&\n                document.getElementById(\"password\").value.trim() === document.getElementById(\"passwordCheck\").value.trim()) {\n                document.getElementById(\"spinner\").style.display = \"block\";\n            }\n        }\n        function hideSpinner() {\n            document.getElementById(\"spinner\").style.display = \"none\";\n        }\n\n        window.addEventListener(\"pageshow\", hideSpinner);\n        window.addEventListener(\"popstate\", hideSpinner);\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</html><script>\n        function loadSpinner() {\n            if (document.getElementById(\"displayName\").value.trim() !== '' &&\n                document.getElementById(\"displayDescription\").value.trim() !== '' &&\n                document.getElementById(\"password\").value.trim() !== '' &&\n                document.getElementById(\"password\").value.trim() === document.getElementById(\"passwordCheck\").value.trim()) {\n                document.getElementById(\"spinner\").style.display = \"block\";\n            }\n        }\n        function hideSpinner() {\n            document.getElementById(\"spinner\").style.display = \"none\";\n        }\n\n        window.addEventListener(\"pageshow\", hideSpinner);\n        window.addEventListener(\"popstate\", hideSpinner);\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
