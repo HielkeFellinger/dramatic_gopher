@@ -25,13 +25,13 @@ type Game interface {
 type BaseGame struct {
 	Id          string
 	Title       string `json:"title"`
-	Version     string `json:"-"` // Sourced form SafeFile
+	Version     string `json:"-"` // Sourced from SafeFile
 	Description string `json:"description"`
 	ImageUrl    string `json:"imageUrl"`
 	SaveFile    string `json:"saveFile"`
 	DataDir     string `json:"-"`
 	Running     bool
-	World       *ecs.World // Sourced form SafeFile
+	World       *ecs.World // Sourced from SafeFile
 }
 
 func (bg *BaseGame) Init() error {

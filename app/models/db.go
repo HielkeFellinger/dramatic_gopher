@@ -40,10 +40,25 @@ func (us *userService) InsertUser(user User) (User, error) {
 	return returnUser, row.Scan(&user.Id, &user.Name, &user.DisplayName, &user.Password, &user.Role)
 }
 
+func (cs *campaignService) GetCampaignByIdAsString(campaignIdStr string) (Campaign, error) {
+	// Convert string to int
+	campaignId, conErr := strconv.Atoi(campaignIdStr)
+	if conErr != nil {
+		return Campaign{}, conErr
+	}
+	return cs.GetCampaignById(int64(campaignId))
+}
+
 func (cs *campaignService) GetCampaignById(campaignId int64) (Campaign, error) {
 	campaign := Campaign{}
 	result := DB.QueryRow(`SELECT * FROM campaigns WHERE id = ?;`, campaignId)
 	return campaign, result.Scan(&campaign.Id, &campaign.Name, &campaign.Description, &campaign.State, &campaign.Password)
+}
+
+func (cs *campaignService) GetCampaignDataDirByCampaignId(campaignId int64) (CampaignToData, error) {
+	campaignToData := CampaignToData{}
+	result := DB.QueryRow(`SELECT * FROM campaign_to_data WHERE campaign_id = ?;`, campaignId)
+	return campaignToData, result.Scan(&campaignToData.Id, &campaignToData.CampaignId, &campaignToData.DataDir)
 }
 
 func (cs *campaignService) GetCampaignsByUserId(userId int64) ([]Campaign, error) {

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/config"
 )
@@ -21,7 +22,7 @@ func FindAvailableGames() []*BaseGame {
 	}
 	for _, entry := range entries {
 		if entry.IsDir() {
-			if possibleGame, loadErr := LoadGameByDirectoryName(entry.Name()); loadErr == nil {
+			if possibleGame, loadErr := LoadGameByDirectoryName(entry.Name(), ""); loadErr == nil {
 				possibleGames = append(possibleGames, possibleGame)
 			} else {
 				log.Printf("Could not read potential campaign save dir: '%s'", loadErr)
@@ -31,7 +32,7 @@ func FindAvailableGames() []*BaseGame {
 	return possibleGames
 }
 
-func LoadGameByDirectoryName(dirName string) (*BaseGame, error) {
+func LoadGameByDirectoryName(dirName string, id string) (*BaseGame, error) {
 	campaignSaveDir := config.CurrentConfig.CampaignSavesDir
 	currentCampaignPath := filepath.Join(campaignSaveDir, dirName)
 
@@ -58,6 +59,9 @@ func LoadGameByDirectoryName(dirName string) (*BaseGame, error) {
 				// OK - Validate if all files are reachable!
 				log.Printf("Successful in reading Campaign save dir: '%s'", currentCampaignPath)
 				potentialGame.DataDir = dirName
+				if len(strings.TrimSpace(id)) > 0 {
+					potentialGame.Id = strings.TrimSpace(id)
+				}
 				return &potentialGame, nil
 			}
 		}

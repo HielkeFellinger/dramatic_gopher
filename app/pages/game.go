@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/HielkeFellinger/dramatic_gopher/app/engine"
 	"github.com/HielkeFellinger/dramatic_gopher/app/models"
@@ -11,6 +13,7 @@ import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/utils"
 	"github.com/HielkeFellinger/dramatic_gopher/app/views"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func LoadGamePage() gin.HandlerFunc {
@@ -68,8 +71,9 @@ func HandleJoinGame() gin.HandlerFunc {
 		notifications := getNotifications(c)
 
 		game, loadErr := retrieveGame(gameId)
-		if loadErr != nil {
-			notifications = append(notifications, models.NewNotification(models.Error, "404 - Game does not exist"))
+		campaign, campaignErr := models.CampaignService.GetCampaignByIdAsString(gameId)
+		if loadErr != nil || campaignErr != nil {
+			notifications = append(notifications, models.NewNotification(models.Error, "404 - Game/Campaign does not exist"))
 			saveNotifications(c, notifications)
 			c.Redirect(http.StatusFound, "/game/load")
 			return
@@ -86,48 +90,79 @@ func HandleJoinGame() gin.HandlerFunc {
 			notifications = append(notifications, noBindErr)
 		}
 
+		// Attempt to Authenticate, if needed
 		if len(notifications) == 0 {
-			// @TODO: Rewire for new auth.
-			// Attempt to authenticate
-			//if game.AuthenticateAsLead(joinGameRequest.Password) {
-			//	if !game.IsRunning() {
-			//		// Start game - OK
-			//		session.AddGameToPool(user.Id, joinGameRequest.DisplayName, game)
-			//		c.Redirect(http.StatusFound, "/game/session/"+game.Id)
-			//		return
-			//	} else {
-			//		if !session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
-			//			notifications = append(notifications,
-			//				models.NewNotification(models.Error, "Another user has already joined this game as Lead!"))
-			//		} else {
-			//			// Join running game - OK
-			//			c.Redirect(http.StatusFound, "/game/session/"+game.Id)
-			//			return
-			//		}
-			//	}
-			//} else if game.AuthenticateAsClient(joinGameRequest.Password) {
-			//	if !game.IsRunning() {
-			//		notifications = append(notifications,
-			//			models.NewNotification(models.Error, "Game is not running, not allowed to start game if not lead!"))
-			//	} else {
-			//		if session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
-			//			notifications = append(notifications,
-			//				models.NewNotification(models.Error, "User is already linked to game as Lead; using client password is blocked"))
-			//		} else {
-			//			// Join running game - OK
-			//			if !session.AddUserIdAndNameToAccessGame(user.Id, joinGameRequest.DisplayName, game.GetId()) {
-			//				notifications = append(notifications,
-			//					models.NewNotification(models.Error, "Failed to add you to the game allow list, please retry"))
-			//			} else {
-			//				c.Redirect(http.StatusFound, "/game/session/"+game.Id)
-			//				return
-			//			}
-			//		}
-			//	}
-			//} else {
-			//	notifications = append(notifications, models.NewNotification(models.Error, "No valid credentials"))
-			//}
+			// Check the validity of the password hash; if no user matches, the password is an invalid hash or has a cost of 0
+			if cost, err := bcrypt.Cost([]byte(campaign.Password)); err != nil || cost == 0 {
+				time.Sleep(5 * time.Second) // Ensures minimal duration in auth attempt
+				notifications = append(notifications, models.NewNotification(models.Error, "Invalid Campaign password"))
+			} else {
+				if errBcrypt := bcrypt.CompareHashAndPassword([]byte(campaign.Password), []byte(joinGameRequest.Password)); errBcrypt != nil {
+					notifications = append(notifications, models.NewNotification(models.Error, "Invalid Campaign password"))
+				} else {
+
+					// @TODO: Check if users is linked to Gama and with which rights
+
+					if !game.IsRunning() {
+						// Start game - OK
+						session.AddGameToPool(user.Id, joinGameRequest.DisplayName, game)
+						c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+						return
+					} else {
+						if !session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
+							notifications = append(notifications,
+								models.NewNotification(models.Error, "Another user has already joined this game as Lead!"))
+						} else {
+							// Join running game - OK
+							c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+							return
+						}
+					}
+				}
+			}
 		}
+
+		//if len(notifications) == 0 {
+		//	// Attempt to authenticate
+		//	if game.AuthenticateAsLead(joinGameRequest.Password) {
+		//		if !game.IsRunning() {
+		//			// Start game - OK
+		//			session.AddGameToPool(user.Id, joinGameRequest.DisplayName, game)
+		//			c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+		//			return
+		//		} else {
+		//			if !session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
+		//				notifications = append(notifications,
+		//					models.NewNotification(models.Error, "Another user has already joined this game as Lead!"))
+		//			} else {
+		//				// Join running game - OK
+		//				c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+		//				return
+		//			}
+		//		}
+		//	} else if game.AuthenticateAsClient(joinGameRequest.Password) {
+		//		if !game.IsRunning() {
+		//			notifications = append(notifications,
+		//				models.NewNotification(models.Error, "Game is not running, not allowed to start game if not lead!"))
+		//		} else {
+		//			if session.IsUserIdLeadInGameById(user.Id, game.GetId()) {
+		//				notifications = append(notifications,
+		//					models.NewNotification(models.Error, "User is already linked to game as Lead; using client password is blocked"))
+		//			} else {
+		//				// Join running game - OK
+		//				if !session.AddUserIdAndNameToAccessGame(user.Id, joinGameRequest.DisplayName, game.GetId()) {
+		//					notifications = append(notifications,
+		//						models.NewNotification(models.Error, "Failed to add you to the game allow list, please retry"))
+		//				} else {
+		//					c.Redirect(http.StatusFound, "/game/session/"+game.Id)
+		//					return
+		//				}
+		//			}
+		//		}
+		//	} else {
+		//		notifications = append(notifications, models.NewNotification(models.Error, "No valid credentials"))
+		//	}
+		//}
 
 		// FAILURE
 		if renderErr := render(c, http.StatusOK, views.JoinGamePage(game, user, notifications)); renderErr != nil {
@@ -311,7 +346,17 @@ func retrieveGame(gameId string) (*engine.BaseGame, error) {
 		}
 	}
 
-	// Attempt to load form file
-	game, loadErr := engine.LoadGameByDirectoryName(gameId)
+	// Attempt to translate string game_id to load dir from database
+	gameIdInt, convErr := strconv.Atoi(gameId)
+	if convErr != nil {
+		return nil, convErr
+	}
+	campaignToData, dbErr := models.CampaignService.GetCampaignDataDirByCampaignId(int64(gameIdInt))
+	if dbErr != nil {
+		return nil, dbErr
+	}
+
+	// Attempt to load from file
+	game, loadErr := engine.LoadGameByDirectoryName(campaignToData.DataDir, campaignToData.CampaignId)
 	return game, loadErr
 }

@@ -12,9 +12,9 @@ type BasicRequestMessage struct {
 }
 
 type RequestHxHeaders struct {
-	HxRequest     string `json:"HX-Request"`
-	HxTrigger     string `json:"HX-Trigger"`
-	HxTriggerName string `json:"HX-Trigger-Name"`
-	HxTarget      string `json:"HX-Target"`
-	HxCurrentUrl  string `json:"HX-Current-URL"`
+	HxRequest     string      `json:"HX-Request"`
+	HxTrigger     string      `json:"HX-Trigger"`
+	HxTriggerName string      `json:"HX-Trigger-Name"`
+	HxTarget      interface{} `json:"HX-Target"`
+	HxCurrentUrl  string      `json:"HX-Current-URL"`
 }
