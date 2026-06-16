@@ -14,7 +14,7 @@ templ BuildGameCard(game engine.Game) {
                 if game.HasId() {
                     <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg
                         text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                       href={ "/game/join/" + game.GetId()}>
+                       href={ game.GameJoinStr() }>
                     if game.IsRunning() {
                     <b>JOIN</b>
                     } else {
@@ -24,7 +24,7 @@ templ BuildGameCard(game engine.Game) {
                 } else {
                     <a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg
                             text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                       href={ "/game/register/" + game.GetDataDir()}>
+                       href={ game.GameRegisterStr() }>
                         <b>REGISTER</b>
                     </a>
                 }

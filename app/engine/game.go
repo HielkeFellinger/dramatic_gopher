@@ -20,6 +20,9 @@ type Game interface {
 	IsRunning() bool
 	Init() error
 	Validate() (string, error)
+	WebSocketConnStr() string
+	GameJoinStr() string
+	GameRegisterStr() string
 }
 
 type BaseGame struct {
@@ -68,6 +71,18 @@ func (bg *BaseGame) HasId() bool {
 
 func (bg *BaseGame) GetId() string {
 	return bg.Id
+}
+
+func (bg *BaseGame) WebSocketConnStr() string {
+	return "/session/" + bg.Id + "/ws"
+}
+
+func (bg *BaseGame) GameJoinStr() string {
+	return "/game/join/" + bg.Id
+}
+
+func (bg *BaseGame) GameRegisterStr() string {
+	return "/game/register/" + bg.DataDir
 }
 
 func (bg *BaseGame) GetTitle() string {

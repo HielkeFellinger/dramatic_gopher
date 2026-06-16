@@ -14,7 +14,7 @@ import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/views/components"
 )
 
-func Session(user models.User, game engine.Game) templ.Component {
+func Session(user models.User, game *engine.BaseGame) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -35,7 +35,7 @@ func Session(user models.User, game engine.Game) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<html lang=\"en\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -48,9 +48,9 @@ func Session(user models.User, game engine.Game) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue("/session/" + game.GetId() + "/ws")
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.ResolveAttributeValue(game.WebSocketConnStr())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/session.templ`, Line: 15, Col: 166}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/session.templ`, Line: 15, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
 		if templ_7745c5c3_Err != nil {
@@ -77,19 +77,19 @@ func Session(user models.User, game engine.Game) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "'</h4></div><div id=\"detail_screen\" class=\"min-w-128 min-h-screen border-l border-gray-700 border-1 items-center justify-between\">DETAILS</div></div></main></body></html><script type=\"text/javascript\" defer>\n        if (lucide) {\n            lucide.createIcons();\n        }\n\n        let reconnectTimer = 0;\n        let status = document.getElementById('status');\n        let socket;\n        let elt;\n\n        document.body.addEventListener('htmx:wsConnecting', function (evt) {\n            console.log('connecting to server');\n            status.innerText = 'Connecting to ';\n\n            // @TODO Implement incremental back-off\n\n            status.classList.add('text-orange-700')\n            status.classList.remove('text-red-700')\n            status.classList.remove('text-green-700')\n            status.setAttribute('data-status', 'connecting');\n        });\n        document.body.addEventListener('htmx:wsOpen', function(evt) {\n            console.log('connected');\n            reconnectTimer = 0;\n            socket = evt.detail.socketWrapper;\n            elt = evt.detail.elt;\n\n            status.innerText = 'Connected to ';\n            status.classList.add('text-green-700')\n            status.classList.remove('text-red-700')\n            status.classList.remove('text-orange-700')\n            status.setAttribute('data-status', 'connected');\n        });\n        document.body.addEventListener('htmx:wsClose', function(evt) {\n            console.log('disconnected');\n            console.warn(evt.detail)\n            reconnectTimer++;\n\n            if (reconnectTimer > 5) {\n                window.location = \"/game/join/")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "'</h4></div><div id=\"detail_screen\" class=\"min-w-128 min-h-screen border-l border-gray-700 border-1 items-center justify-between\">DETAILS</div></div></main></body></html><script type=\"text/javascript\" defer>\n        if (lucide) {\n            lucide.createIcons();\n        }\n\n        const gameId = \"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var4, templ_7745c5c3_Err := templruntime.ScriptContentInsideStringLiteral(game.GetId())
+		templ_7745c5c3_Var4, templ_7745c5c3_Err := templruntime.ScriptContentInsideStringLiteral(game.Id)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/session.templ`, Line: 68, Col: 61}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/session.templ`, Line: 34, Col: 34}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\"\n            }\n\n            status.innerText = 'Disconnected from ';\n            status.classList.add('text-red-700')\n            status.classList.remove('text-orange-700')\n            status.classList.remove('text-green-700')\n            status.setAttribute('data-status', 'disconnected');\n        });\n\n        function reAuthUserToGame(gameId) {\n\n        }\n    </script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\";\n\n        let reconnectTimer = 0;\n        let status = document.getElementById('status');\n        let socket;\n        let elt;\n\n        document.body.addEventListener('htmx:wsConnecting', function (evt) {\n            console.log('connecting to server');\n            status.innerText = 'Connecting to ';\n\n            // @TODO Implement incremental back-off\n\n            status.classList.add('text-orange-700')\n            status.classList.remove('text-red-700')\n            status.classList.remove('text-green-700')\n            status.setAttribute('data-status', 'connecting');\n        });\n        document.body.addEventListener('htmx:wsOpen', function(evt) {\n            console.log('connected');\n            reconnectTimer = 0;\n            socket = evt.detail.socketWrapper;\n            elt = evt.detail.elt;\n\n            status.innerText = 'Connected to ';\n            status.classList.add('text-green-700')\n            status.classList.remove('text-red-700')\n            status.classList.remove('text-orange-700')\n            status.setAttribute('data-status', 'connected');\n        });\n        document.body.addEventListener('htmx:wsClose', function(evt) {\n            console.log('disconnected');\n            console.warn(evt.detail)\n            reconnectTimer++;\n\n            if (reconnectTimer > 5) {\n                window.location = \"/game/join/\" + gameId\n            }\n\n            status.innerText = 'Disconnected from ';\n            status.classList.add('text-red-700')\n            status.classList.remove('text-orange-700')\n            status.classList.remove('text-green-700')\n            status.setAttribute('data-status', 'disconnected');\n        });\n\n        function reAuthUserToGame(gameId) {\n\n        }\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

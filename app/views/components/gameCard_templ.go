@@ -67,9 +67,9 @@ func BuildGameCard(game engine.Game) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 templ.SafeURL
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinURLErrs("/game/join/" + game.GetId())
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinURLErrs(game.GameJoinStr())
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/gameCard.templ`, Line: 17, Col: 58}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/gameCard.templ`, Line: 17, Col: 48}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -100,9 +100,9 @@ func BuildGameCard(game engine.Game) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 templ.SafeURL
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs("/game/register/" + game.GetDataDir())
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(game.GameRegisterStr())
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/gameCard.templ`, Line: 27, Col: 67}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `app/views/components/gameCard.templ`, Line: 27, Col: 52}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {

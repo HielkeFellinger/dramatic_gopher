@@ -6,13 +6,13 @@ import (
 	"github.com/HielkeFellinger/dramatic_gopher/app/models"
 )
 
-templ Session(user models.User, game engine.Game) {
-    <!DOCTYPE html>
+templ Session(user models.User, game *engine.BaseGame) {
     <html lang="en">
         @components.Header()
         <body class="bg-gray-800">
             <main class="min-h-screen min-h-screen min-w-screen" >
-                <div class="container flex flex-row justify-center items-center min-h-screen min-w-screen" hx-ext="ws" ws-connect={ "/session/" + game.GetId() + "/ws" }>
+                <div class="container flex flex-row justify-center items-center min-h-screen min-w-screen"
+                     hx-ext="ws" ws-connect={ game.WebSocketConnStr() } >
                     <div id="chat_screen" class="min-w-112 max-w-112 min-h-screen max-h-screen border-r border-gray-700 border-1">
                         @components.FullChat()
                     </div>
@@ -30,6 +30,8 @@ templ Session(user models.User, game engine.Game) {
         if (lucide) {
             lucide.createIcons();
         }
+
+        const gameId = "{{ game.Id }}";
 
         let reconnectTimer = 0;
         let status = document.getElementById('status');
@@ -65,7 +67,7 @@ templ Session(user models.User, game engine.Game) {
             reconnectTimer++;
 
             if (reconnectTimer > 5) {
-                window.location = "/game/join/{{ game.GetId() }}"
+                window.location = "/game/join/" + gameId
             }
 
             status.innerText = 'Disconnected from ';
