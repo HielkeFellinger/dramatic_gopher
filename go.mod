@@ -1,6 +1,6 @@
 module github.com/HielkeFellinger/dramatic_gopher
 
-go 1.25.3
+go 1.25.11
 
 require (
 	github.com/a-h/templ v0.3.1020

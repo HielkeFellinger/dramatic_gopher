@@ -8,12 +8,26 @@ Build for entertainment (On LAN), with friends and getting more familiar with Go
 
 Is it possible to play a game currently? No, this iteration is ~ 11% on the way there
 
-### Development
+## Development
 
-GoTH - stack
+GoTH - stack:
+
 - [(Go)](https://go.dev/), [(T)empl](https://github.com/a-h/templ) + [(H)tmx](https://htmx.org)
 - Extra: [Gin Web Framework](https://gin-gonic.com/) + [Gorilla](https://pkg.go.dev/github.com/gorilla/websocket@v1.5.3) (Main Framework + Websockets)
 
 Recommendations:
-- [Templ](https://templ.guide/): install/update: ```go install github.com/a-h/templ/cmd/templ@latest``` run: ```templ generate --watch```
-- [Air](https://github.com/air-verse/air): install/update: ```go install github.com/air-verse/air@latest``` run ```air```
+
+- [Templ](https://templ.guide/): 
+   - install/update: ```go install github.com/a-h/templ/cmd/templ@latest```
+   - run: ```templ generate --watch```
+- [Air](https://github.com/air-verse/air): 
+   - install/update: ```go install github.com/air-verse/air@latest```
+   - run ```air```
+
+### Database
+
+Currently, SQLLite is used as a database, for portability (Ease of use is debatable)
+
+### Game
+
+A Test/Debug game is included and will be developed alongside development of the engine
