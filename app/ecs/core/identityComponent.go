@@ -1,4 +1,4 @@
-package components
+package core
 
 type IdentityComponent struct {
 	BaseComponent
