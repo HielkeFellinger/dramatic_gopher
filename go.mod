@@ -1,6 +1,6 @@
 module github.com/HielkeFellinger/dramatic_gopher
 
-go 1.25.11
+go 1.26.0
 
 require (
 	github.com/a-h/templ v0.3.1020
@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/joho/godotenv v1.5.1
 	github.com/mattn/go-sqlite3 v1.14.50
-	golang.org/x/crypto v0.55.0
+	golang.org/x/crypto v0.56.0
 )
 
 require (
